@@ -1,0 +1,27 @@
+{
+  "name": "reviewservicepro",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tailwindcss -i ./assets/src/css/app.css -o ./assets/dist/css/app.css --watch",
+    "build": "tailwindcss -i ./assets/src/css/app.css -o ./assets/dist/css/app.css --minify"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^4.3.0"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.3.0",
+    "alpinejs": "^3.15.12",
+    "gsap": "^3.15.0",
+    "lottie-web": "^5.13.0",
+    "lucide": "^1.17.0",
+    "swiper": "^12.2.0"
+  }
+}

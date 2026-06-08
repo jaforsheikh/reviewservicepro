@@ -1,0 +1,102 @@
+/* INDUSTRIES SECTION */
+
+.ind-spotlit .ind-card:not(:hover) {
+  opacity: 0.45;
+  transform: scale(0.985);
+}
+
+.ind-card:hover .ind-sweep {
+  animation: indSweep 2s linear infinite;
+}
+
+@keyframes indSweep {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ind-underline {
+  transition: transform 0.8s ease;
+}
+/* final cta */
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.65;
+  }
+}
+/* Footer design */
+@keyframes footer-beam {
+  0% {
+    left: -60%;
+  }
+
+  100% {
+    left: 120%;
+  }
+}
+
+@keyframes footer-glow {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.footer-beam {
+  animation: footer-beam 4s ease-in-out infinite;
+}
+
+.footer-glow {
+  animation: footer-glow 6s ease-in-out infinite;
+}
+
+.footer-glow-delay {
+  animation: footer-glow 6s ease-in-out infinite 3s;
+}
+
+/* Navbar */
+@media (max-width: 782px) {
+  body.admin-bar #site-header {
+    top: 46px;
+  }
+}
+
+@media (min-width: 783px) {
+  body.admin-bar #site-header {
+    top: 32px;
+  }
+}
+#site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99999;
+}
+
+body.admin-bar #site-header {
+  top: 32px;
+}
+
+@media (max-width: 782px) {
+  body.admin-bar #site-header {
+    top: 46px;
+  }
+}
+
+#primary {
+  padding-top: 72px;
+}

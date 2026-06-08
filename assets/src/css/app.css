@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+/* Theme Colors */
+@theme {
+  --color-rsp-navy: #07111f;
+  --color-rsp-slate: #162033;
+  --color-rsp-blue: #2563eb;
+  --color-rsp-blue-dark: #1d4ed8;
+  --color-rsp-emerald: #10b981;
+  --color-rsp-emerald-dark: #047857;
+  --color-rsp-cloud: #f8fafc;
+  --color-rsp-white: #ffffff;
+  --color-rsp-black: #111827;
+  --color-rsp-muted: #64748b;
+  --color-rsp-border: #e2e8f0;
+  --color-rsp-gold: #d6a84f;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-rsp-cloud text-rsp-black antialiased;
+  }
+
+  a {
+    @apply no-underline;
+  }
+}
+
+@layer components {
+  .rsp-container {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+}
+
+/* Hero Background Animation */
+.hero-bg-slide {
+  animation: heroSlowZoom 9s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+@keyframes heroSlowZoom {
+  from {
+    transform: scale(1) translateX(0);
+  }
+
+  to {
+    transform: scale(1.08) translateX(-1.2%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg-slide {
+    animation: none;
+  }
+}
+.orm-marquee {
+  animation: ormMarquee 45s linear infinite;
+}
+
+.orm-marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes ormMarquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+/* Industries Section */
+.ind-cursor-glow {
+  background: radial-gradient(
+    400px circle at var(--ind-mx, 50%) var(--ind-my, 50%),
+    rgba(37, 99, 235, 0.12),
+    transparent 60%
+  );
+}
+
+.ind-spotlit .ind-card:not(:hover) {
+  opacity: 0.42;
+  transform: scale(0.985);
+}
+
+.ind-card:hover .ind-sweep {
+  animation: indSweepRotate 2s linear infinite;
+}
+
+@keyframes indSweepRotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ind-underline {
+  transform: scaleX(0);
+  transition: transform 0.8s ease;
+}
