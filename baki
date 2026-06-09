@@ -1,5 +1,41 @@
 Mama, **product content chara** ekhono main baki kaj gula holo website-er **system, SEO, WooCommerce flow, client portal, QA, security, marketing setup**. Product content just ekta layer. Full professional service website korte aro kichu important layer baki ase.
 
+Haan mama, **main design work প্রায় 80–90% done**, but final professional launch-er age kichu **design QA + polish** baki ache. Eita normal, কারণ amra onek file/section update korechi.
+
+### Baki design work gula
+
+**1. Homepage final consistency check**
+Home page-e section-by-section check korte hobe: hero, trust signals, problem, services overview, reporting, industries, academy, case studies, FAQ, final CTA.
+Especially dark section-er title/body color mismatch ache কিনা check korte hobe.
+
+**2. Dynamic post/card image check**
+ORM Academy, Industries, Case Studies — dynamic post gula homepage/archives/single page-e thik image, title color, excerpt, spacing show kortese কিনা check korte hobe.
+
+**3. Mobile responsive polish**
+Mobile-e header, menu dropdown, hero title, card grid, WooCommerce cart/checkout, client portal sidebar — এগুলো manually check korte hobe.
+
+**4. Header/menu final UX**
+Resources dropdown, Portal button, Free Audit button, active menu state, hover timing — final smooth korte hobe.
+
+**5. Client Portal final QA**
+My Account dashboard, Orders, View Order, Payment Methods, Address, Account Details — layout compact hoise, but real order/customer data diye test korte hobe.
+
+**6. WooCommerce flow test**
+Pricing → Product → Add/Order Now → Cart → Checkout → Thank You → My Account order details — full flow test korte hobe.
+
+**7. Typography/color global audit**
+Kichu jaygay global font/color override problem hocche. Dark section-e title white, light section-e title #334155, body #64748B — eta final audit korte hobe.
+
+**8. Legal/contact/footer polish check**
+Privacy, Terms, Disclaimer, Contact, Footer — design done, but spacing/link/social/contact info final verify korte hobe.
+
+### Amar recommendation
+
+Ekhon new design add na kore **Final Design QA Phase** start kora best.
+
+Next step: তুমি homepage-er full screenshot dao — top theke bottom porjonto. Ami section-by-section bole dibo:
+**perfect / fix needed / file name / exact issue**.
+
 ## 1. WooCommerce product setup/config baki
 
 Product content ready holeo WooCommerce backend-e ei gula setup korte hobe:

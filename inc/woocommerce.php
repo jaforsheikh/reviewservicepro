@@ -71,3 +71,32 @@ if (! function_exists('rsp_woocommerce_service_button_text')) {
 }
 add_filter('woocommerce_product_single_add_to_cart_text', 'rsp_woocommerce_service_button_text', 20, 2);
 add_filter('woocommerce_product_add_to_cart_text', 'rsp_woocommerce_service_button_text', 20, 2);
+
+if (! function_exists('rsp_woocommerce_checkout_wrapper_css')) {
+  /**
+   * Inline CSS to neutralize WooCommerce's .woocommerce shortcode wrapper width.
+   *
+   * WooCommerce wraps [woocommerce_checkout] in a <div class="woocommerce">
+   * which can inherit or compute a bloated width, causing margin:auto to
+   * push content off-screen. This forces it to be a neutral full-width block.
+   */
+  function rsp_woocommerce_checkout_wrapper_css()
+  {
+    if (! is_checkout() && ! is_cart() && ! is_account_page()) {
+      return;
+    }
+
+    echo '<style id="rsp-woo-wrapper-fix">
+      .woocommerce,
+      .woocommerce-page .woocommerce {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        float: none !important;
+        box-sizing: border-box !important;
+      }
+    </style>';
+  }
+}
+add_action('wp_head', 'rsp_woocommerce_checkout_wrapper_css', 5);

@@ -100,6 +100,27 @@
     }
 
     const closeButtons = $$("[data-mobile-menu-close]");
+    const openIcon = $(".mobile-menu-open", toggle);
+    const closeIcon = $(".mobile-menu-close", toggle);
+    const openLabel =
+      toggle.getAttribute("data-open-label") ||
+      toggle.getAttribute("aria-label") ||
+      "Open mobile menu";
+    const closeLabel =
+      toggle.getAttribute("data-close-label") || "Close mobile menu";
+
+    const setVisualState = (open) => {
+      if (openIcon) {
+        openIcon.classList.toggle("hidden", open);
+      }
+
+      if (closeIcon) {
+        closeIcon.classList.toggle("hidden", !open);
+      }
+
+      toggle.setAttribute("aria-label", open ? closeLabel : openLabel);
+    };
+
     const focusableSelectors = [
       "a[href]",
       "button:not([disabled])",
@@ -118,8 +139,9 @@
 
       toggle.setAttribute("aria-expanded", "true");
       menu.classList.remove("hidden");
-      menu.classList.add("flex");
+      menu.classList.add("flex", "flex-col");
       document.body.classList.add("overflow-hidden");
+      setVisualState(true);
 
       const firstFocusable = $(focusableSelectors, menu);
 
@@ -133,8 +155,9 @@
     const closeMenu = () => {
       toggle.setAttribute("aria-expanded", "false");
       menu.classList.add("hidden");
-      menu.classList.remove("flex");
+      menu.classList.remove("flex", "flex-col");
       document.body.classList.remove("overflow-hidden");
+      setVisualState(false);
 
       if (previousFocus && typeof previousFocus.focus === "function") {
         previousFocus.focus();
@@ -149,6 +172,7 @@
       }
     };
 
+    setVisualState(isOpen());
     toggle.addEventListener("click", toggleMenu);
 
     closeButtons.forEach((button) => {

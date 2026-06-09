@@ -1,11 +1,9 @@
 <?php
 
 /**
- * Show info messages
+ * Show notice messages
  *
  * File: woocommerce/notices/notice.php
- *
- * ReviewService.Pro custom WooCommerce info notices.
  *
  * @package ReviewServicePro
  */
@@ -15,9 +13,17 @@ defined('ABSPATH') || exit;
 if (empty($notices)) {
   return;
 }
+
+$render_notice_icon = function () {
+  if (function_exists('rsp_icon')) {
+    return wp_kses_post(rsp_icon('info', 'h-5 w-5'));
+  }
+
+  return '<span aria-hidden="true">i</span>';
+};
 ?>
 
-<div class="rsp-wc-notices rsp-wc-notices-info mb-8 space-y-4" role="status" aria-live="polite">
+<div class="rsp-wc-notices rsp-wc-notices-info mb-7 space-y-4" role="status" aria-live="polite">
   <?php foreach ($notices as $notice) : ?>
     <?php
     $notice_text = isset($notice['notice']) ? $notice['notice'] : '';
@@ -25,22 +31,19 @@ if (empty($notices)) {
     ?>
 
     <div
-      class="relative overflow-hidden rounded-[1.35rem] border border-blue-400/25 bg-blue-500/[0.08] p-5 shadow-[0_18px_55px_rgba(37,99,235,0.10)] backdrop-blur-xl"
+      class="woocommerce-info relative overflow-hidden rounded-[1.35rem] border border-blue-200 bg-blue-50 px-5 py-4 text-[#3B4658] shadow-[0_14px_40px_rgba(15,23,42,0.06)]"
       <?php echo wp_kses_post($data_attr); ?>>
+      <div class="flex items-start gap-4">
+        <span class="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-blue-200 bg-white text-blue-600 shadow-sm">
+          <?php echo $render_notice_icon(); ?>
+        </span>
 
-      <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.18),transparent_36%)]"></div>
-
-      <div class="relative z-10 flex gap-4">
-        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-blue-300/25 bg-blue-400/10 text-blue-200">
-          <i data-lucide="info" class="h-5 w-5" aria-hidden="true"></i>
-        </div>
-
-        <div class="min-w-0 flex-1">
-          <p class="text-xs font-semibold uppercase tracking-[0.14em] text-blue-200">
+        <div class="min-w-0">
+          <p class="font-['DM_Mono',monospace] text-[11px] font-[800] uppercase tracking-[0.14em] text-blue-700">
             <?php esc_html_e('Notice', 'reviewservicepro'); ?>
           </p>
 
-          <div class="mt-2 text-base font-normal leading-8 text-slate-100 [&_a]:font-medium [&_a]:text-blue-200 [&_a]:underline-offset-4 hover:[&_a]:underline">
+          <div class="mt-1 text-[16px] font-medium leading-7 text-[#3B4658] [&_a]:font-[800] [&_a]:text-blue-700">
             <?php echo wc_kses_notice($notice_text); ?>
           </div>
         </div>
@@ -48,11 +51,3 @@ if (empty($notices)) {
     </div>
   <?php endforeach; ?>
 </div>
-
-<script>
-  (function() {
-    if (window.lucide && typeof window.lucide.createIcons === 'function') {
-      window.lucide.createIcons();
-    }
-  })();
-</script>

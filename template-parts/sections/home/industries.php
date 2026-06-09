@@ -95,7 +95,7 @@ $industries = [
         <?php esc_html_e('Industries We Serve', 'reviewservicepro'); ?>
       </span>
 
-      <h2 class="mb-5 text-3xl font-extrabold leading-tight tracking-tight text-white md:text-5xl">
+      <h2 class="mb-5 text-3xl font-extrabold leading-tight tracking-tight text-white! md:text-5xl">
         <span class="block text-base font-normal text-slate-500 md:text-lg">
           <?php esc_html_e('Trusted by businesses across', 'reviewservicepro'); ?>
         </span>

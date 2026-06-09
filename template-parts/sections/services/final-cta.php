@@ -118,7 +118,7 @@ $tone_classes = [
 
             <h2
               id="services-final-cta-title"
-              class="max-w-3xl font-sans text-3xl font-black leading-[1.08] tracking-[-0.045em] text-white md:text-4xl lg:text-[2.8rem]">
+              class="max-w-3xl font-sans text-3xl font-black leading-[1.08] tracking-[-0.045em] text-white! md:text-4xl lg:text-[2.8rem]">
               <?php esc_html_e('Ready to build a stronger online reputation system?', 'reviewservicepro'); ?>
             </h2>
 

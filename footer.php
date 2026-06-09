@@ -5,7 +5,7 @@
  *
  * File: footer.php
  *
- * ReviewService.Pro — Premium One-File Footer
+ * ReviewService.Pro — Premium Dark Footer
  *
  * Includes:
  * - Footer PHP data arrays
@@ -194,22 +194,22 @@ $trust_badges = [
   [
     'icon'  => 'shield-check',
     'label' => __('Ethical ORM', 'reviewservicepro'),
-    'class' => 'border-[#00C853]/30 bg-[#00C853]/10 text-white',
+    'class' => 'border-[#00C853]/30 bg-[#00C853]/10 text-emerald-50',
   ],
   [
     'icon'  => 'badge-check',
     'label' => __('Platform-Compliant', 'reviewservicepro'),
-    'class' => 'border-blue-400/30 bg-blue-500/10 text-white',
+    'class' => 'border-blue-400/30 bg-blue-500/10 text-blue-50',
   ],
   [
     'icon'  => 'ban',
     'label' => __('No Fake Reviews', 'reviewservicepro'),
-    'class' => 'border-[#00C853]/30 bg-[#00C853]/10 text-white',
+    'class' => 'border-[#00C853]/30 bg-[#00C853]/10 text-emerald-50',
   ],
   [
     'icon'  => 'lock',
     'label' => __('Secure Portal', 'reviewservicepro'),
-    'class' => 'border-blue-400/30 bg-blue-500/10 text-white',
+    'class' => 'border-blue-400/30 bg-blue-500/10 text-blue-50',
   ],
 ];
 
@@ -274,20 +274,44 @@ if (! empty($schema_logo_url)) {
 ?>
 
 <style>
-  /* Footer typography weight reset */
+  /**
+   * ReviewService.Pro footer-only effects.
+   * Background gradient stays unchanged; this only improves typography, motion, hover and spacing.
+   */
+  #site-footer {
+    --rsp-footer-title: #ffffff;
+    --rsp-footer-heading: #e2e8f0;
+    --rsp-footer-body: #cbd5e1;
+    --rsp-footer-muted: #94a3b8;
+    --rsp-footer-blue: #2563EB;
+    --rsp-footer-green: #00C853;
+    --rsp-footer-card: rgba(255, 255, 255, 0.065);
+    --rsp-footer-border: rgba(255, 255, 255, 0.11);
+    isolation: isolate;
+  }
+
+  #site-footer,
   #site-footer p,
   #site-footer a,
   #site-footer li,
   #site-footer address,
   #site-footer input,
   #site-footer button {
-    font-weight: 400 !important;
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
   }
 
-  /**
-   * ReviewService.Pro footer-only effects.
-   * Kept inline because user requested one-file footer.
-   */
+  #site-footer h2,
+  #site-footer h3,
+  #site-footer .rsp-footer-logo-text {
+    font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  #site-footer .rsp-footer-eyebrow,
+  #site-footer .rsp-footer-column-title {
+    font-family: "DM Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  }
 
   .rsp-footer-beam {
     animation: rspFooterBeamRun 6s ease-in-out infinite;
@@ -367,7 +391,10 @@ if (! empty($schema_logo_url)) {
     transform: translateY(26px);
     transition:
       opacity 720ms cubic-bezier(0.16, 1, 0.3, 1),
-      transform 720ms cubic-bezier(0.16, 1, 0.3, 1);
+      transform 720ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 260ms ease,
+      background-color 260ms ease,
+      box-shadow 260ms ease;
   }
 
   .rsp-footer-reveal.rsp-is-visible {
@@ -377,27 +404,130 @@ if (! empty($schema_logo_url)) {
 
   .rsp-footer-link {
     position: relative;
+    width: fit-content;
   }
 
   .rsp-footer-link::after {
     content: "";
     position: absolute;
     left: 0;
-    bottom: 1px;
+    bottom: 2px;
     width: 0;
     height: 1px;
-    background: rgba(0, 200, 83, 0.95);
+    border-radius: 999px;
+    background: linear-gradient(90deg, #2563EB, #00C853);
     transition: width 260ms ease;
   }
 
-  .rsp-footer-link:hover::after {
+  .rsp-footer-link:hover::after,
+  .rsp-footer-link:focus-visible::after {
     width: 100%;
+  }
+
+  .rsp-footer-link-icon {
+    transition:
+      transform 240ms ease,
+      color 240ms ease,
+      opacity 240ms ease;
+  }
+
+  .rsp-footer-link:hover .rsp-footer-link-icon,
+  .rsp-footer-link:focus-visible .rsp-footer-link-icon {
+    transform: translateX(3px);
+    color: var(--rsp-footer-green);
+    opacity: 1;
+  }
+
+  .rsp-footer-motion-border {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .rsp-footer-motion-border::before {
+    content: "";
+    position: absolute;
+    inset: -115%;
+    z-index: -2;
+    border-radius: inherit;
+    background: conic-gradient(from 0deg,
+        rgba(37, 99, 235, 0.12),
+        rgba(0, 200, 83, 0.34),
+        rgba(20, 184, 166, 0.20),
+        rgba(37, 99, 235, 0.30),
+        rgba(37, 99, 235, 0.12));
+    opacity: 0;
+    transform: rotate(0deg);
+    animation: rspFooterBorderSpin 7s linear infinite;
+    pointer-events: none;
+    transition: opacity 260ms ease;
+  }
+
+  .rsp-footer-motion-border::after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    z-index: -1;
+    border-radius: inherit;
+    background: var(--rsp-footer-motion-inner, rgba(255, 255, 255, 0.065));
+    pointer-events: none;
+  }
+
+  .rsp-footer-motion-border:hover::before,
+  .rsp-footer-motion-border:focus-within::before {
+    opacity: 1;
+  }
+
+  @keyframes rspFooterBorderSpin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .rsp-footer-shine {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .rsp-footer-shine::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -120%;
+    z-index: 0;
+    width: 72%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.34), transparent);
+    transform: skewX(-18deg);
+    transition: left 720ms ease;
+    pointer-events: none;
+  }
+
+  .rsp-footer-shine:hover::before,
+  .rsp-footer-shine:focus-visible::before {
+    left: 135%;
   }
 
   .rsp-footer-social svg {
     width: 18px;
     height: 18px;
     display: block;
+  }
+
+  .rsp-footer-hover-card {
+    transition:
+      transform 260ms cubic-bezier(0.2, 0.9, 0.2, 1),
+      border-color 260ms ease,
+      background-color 260ms ease,
+      box-shadow 260ms ease;
+  }
+
+  .rsp-footer-hover-card:hover,
+  .rsp-footer-hover-card:focus-within {
+    transform: translateY(-4px);
+    border-color: rgba(37, 99, 235, 0.38);
+    background-color: rgba(255, 255, 255, 0.09);
+    box-shadow: 0 20px 60px rgba(2, 6, 23, 0.24);
   }
 
   .rsp-footer-float {
@@ -420,8 +550,9 @@ if (! empty($schema_logo_url)) {
 
     .rsp-footer-beam,
     .rsp-footer-float,
-    .rsp-footer-aurora {
-      animation: none;
+    .rsp-footer-aurora,
+    .rsp-footer-motion-border::before {
+      animation: none !important;
     }
 
     .rsp-footer-reveal {
@@ -429,8 +560,14 @@ if (! empty($schema_logo_url)) {
       transform: none;
       transition: none;
     }
+
+    .rsp-footer-shine::before {
+      display: none;
+    }
   }
 </style>
+
+</main>
 
 <footer
   id="site-footer"
@@ -461,28 +598,33 @@ if (! empty($schema_logo_url)) {
 
   <!-- Newsletter -->
   <section
-    class="relative z-10 border-b border-white/[0.08] bg-[linear-gradient(90deg,rgba(37,99,235,0.04),transparent_62%,rgba(0,200,83,0.03))] py-7"
+    class="relative z-10 border-b border-white/[0.08] bg-[linear-gradient(90deg,rgba(37,99,235,0.04),transparent_62%,rgba(0,200,83,0.03))] py-8 md:py-9"
     aria-label="<?php esc_attr_e('Newsletter signup', 'reviewservicepro'); ?>">
 
     <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-      <div class="flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
+      <div class="rsp-footer-motion-border grid gap-6 rounded-[1.5rem] border border-white/[0.10] bg-white/[0.045] p-5 shadow-[0_18px_70px_rgba(2,6,23,0.24)] md:p-6 lg:grid-cols-[1fr_0.9fr] lg:items-center" style="--rsp-footer-motion-inner:rgba(255,255,255,0.045);">
 
         <div class="rsp-footer-reveal max-w-2xl" data-rsp-footer-reveal>
-          <h2 class="text-base font-black leading-7 text-white">
+          <span class="rsp-footer-eyebrow mb-3 inline-flex items-center gap-2 rounded-full border border-blue-400/25 bg-blue-500/10 px-3 py-1.5 text-[11px] font-[800] uppercase tracking-[0.14em] text-blue-200">
+            <i data-lucide="mail-check" class="h-3.5 w-3.5" aria-hidden="true"></i>
+            <?php esc_html_e('Weekly trust insights', 'reviewservicepro'); ?>
+          </span>
+
+          <h2 class="text-[1.25rem] font-[800] leading-7 tracking-[-0.035em] text-white! md:text-[1.55rem]">
             <?php esc_html_e('Get Weekly ORM Tips — Free', 'reviewservicepro'); ?>
           </h2>
 
-          <p class="mt-1 text-base leading-7 text-white">
+          <p class="mt-2 max-w-2xl text-[16px] font-medium leading-8 text-slate-300">
             <?php esc_html_e('Reputation strategies, platform updates, and response templates. Straight to your inbox.', 'reviewservicepro'); ?>
           </p>
         </div>
 
-        <div class="rsp-footer-reveal" data-rsp-footer-reveal>
+        <div class="rsp-footer-reveal lg:justify-self-end" data-rsp-footer-reveal>
           <?php if (! empty($newsletter_shortcode)) : ?>
             <?php echo do_shortcode(wp_kses_post($newsletter_shortcode)); ?>
           <?php else : ?>
             <form
-              class="flex flex-col gap-2 sm:flex-row"
+              class="flex flex-col gap-3 sm:flex-row"
               action="<?php echo esc_url(home_url('/contact/')); ?>"
               method="get"
               aria-label="<?php esc_attr_e('Subscribe to ORM tips newsletter', 'reviewservicepro'); ?>">
@@ -500,18 +642,20 @@ if (! empty($schema_logo_url)) {
                 placeholder="<?php esc_attr_e('Your business email address', 'reviewservicepro'); ?>"
                 autocomplete="email"
                 required
-                class="min-h-[48px] w-full rounded-xl border border-white/[0.18] bg-white/[0.09] px-4 text-base text-white outline-none transition-all duration-200 placeholder:text-white/70 hover:border-white/35 focus:border-blue-500/75 focus:bg-blue-600/[0.10] sm:w-[320px]">
+                class="min-h-[52px] w-full rounded-2xl border border-white/[0.16] bg-white/[0.085] px-4 text-[16px] font-medium text-white outline-none transition-all duration-200 placeholder:text-slate-400 hover:border-white/35 focus:border-blue-400 focus:bg-blue-600/[0.10] focus:ring-4 focus:ring-blue-500/15 sm:w-[330px]">
 
               <button
                 type="submit"
-                class="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-[#2563EB] px-5 text-base font-black text-white shadow-lg shadow-blue-900/30 transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-blue-900/45">
-                <i data-lucide="mail" class="h-4 w-4" aria-hidden="true"></i>
-                <?php esc_html_e('Subscribe', 'reviewservicepro'); ?>
+                class="rsp-footer-shine inline-flex min-h-[52px] items-center justify-center gap-2 rounded-2xl bg-[#2563EB] px-6 text-[16px] font-[800] text-white shadow-[0_14px_34px_rgba(37,99,235,0.26)] transition-all duration-200 hover:-translate-y-1 hover:bg-blue-700 hover:shadow-blue-900/45 focus:outline-none focus:ring-4 focus:ring-blue-500/20">
+                <span class="relative z-10 inline-flex items-center gap-2">
+                  <i data-lucide="mail" class="h-4 w-4" aria-hidden="true"></i>
+                  <?php esc_html_e('Subscribe', 'reviewservicepro'); ?>
+                </span>
               </button>
             </form>
           <?php endif; ?>
 
-          <p class="mt-2 text-sm leading-6 text-white">
+          <p class="mt-3 text-sm font-medium leading-6 text-slate-400">
             <?php esc_html_e('✓ Free · No spam · Unsubscribe anytime', 'reviewservicepro'); ?>
           </p>
         </div>
@@ -521,10 +665,10 @@ if (! empty($schema_logo_url)) {
   </section>
 
   <!-- Main Footer -->
-  <div class="relative z-10 py-12 md:py-14">
+  <div class="relative z-10 py-14 md:py-16">
     <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
 
-      <div class="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-[1.55fr_1fr_1fr_1fr] lg:gap-12">
+      <div class="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-[1.55fr_1fr_1fr_1fr] lg:gap-12 xl:gap-14">
 
         <!-- Brand -->
         <div class="rsp-footer-reveal" data-rsp-footer-reveal>
@@ -533,20 +677,20 @@ if (! empty($schema_logo_url)) {
             class="inline-flex items-baseline rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/25"
             aria-label="<?php esc_attr_e('Go to ReviewService.Pro homepage', 'reviewservicepro'); ?>">
 
-            <span class="text-[2rem] font-black leading-none tracking-[-0.06em] text-white sm:text-[2.35rem]">
+            <span class="rsp-footer-logo-text text-[2rem] font-medium leading-none tracking-[-0.06em] text-white sm:text-[2.35rem]">
               ReviewService<span class="text-[#00C853]">.Pro</span>
             </span>
           </a>
 
-          <p class="mt-5 inline-block rounded-xl border border-[#00C853]/30 bg-[#00C853]/10 px-4 py-3 text-base italic leading-8 text-white shadow-lg shadow-emerald-950/10">
+          <p class="mt-5 inline-block rounded-2xl border border-[#00C853]/30 bg-[#00C853]/10 px-4 py-3 text-[16px] font-medium italic leading-8 text-emerald-50 shadow-lg shadow-emerald-950/10">
             <?php esc_html_e('Ethical Online Reputation Management for businesses that grow through trust.', 'reviewservicepro'); ?>
           </p>
 
-          <p class="mt-5 max-w-sm text-base leading-8 text-white">
+          <p class="mt-5 max-w-sm text-[16px] font-normal leading-8 text-slate-300">
             <?php esc_html_e('We help businesses build trust, improve visibility, and grow through ethical reputation management — no fake reviews, no manipulation, no shortcuts.', 'reviewservicepro'); ?>
           </p>
 
-          <div class="mt-5 flex items-start gap-2 text-base leading-7 text-white">
+          <div class="mt-5 flex items-start gap-2 text-[16px] font-medium leading-7 text-slate-300">
             <i data-lucide="map-pin" class="mt-1 h-4 w-4 shrink-0 text-[#00C853]" aria-hidden="true"></i>
             <address class="not-italic">
               <?php echo esc_html($address); ?>
@@ -556,7 +700,7 @@ if (! empty($schema_logo_url)) {
           <div class="mt-6 flex flex-wrap gap-2" role="list" aria-label="<?php esc_attr_e('Service commitments', 'reviewservicepro'); ?>">
             <?php foreach ($trust_badges as $badge) : ?>
               <span
-                class="<?php echo esc_attr($badge['class']); ?> inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-black"
+                class="<?php echo esc_attr($badge['class']); ?> rsp-footer-hover-card inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-[800]"
                 role="listitem">
 
                 <i data-lucide="<?php echo esc_attr($badge['icon']); ?>" class="h-3.5 w-3.5" aria-hidden="true"></i>
@@ -568,7 +712,7 @@ if (! empty($schema_logo_url)) {
 
         <!-- Services + Company -->
         <div class="rsp-footer-reveal" data-rsp-footer-reveal>
-          <h3 class="mb-4 border-b border-white/[0.12] pb-3 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-blue-300">
+          <h3 class="rsp-footer-column-title mb-4 border-b border-white/[0.12] pb-3 text-[11px] font-[800] uppercase tracking-[0.18em] text-blue-300">
             <?php esc_html_e('Services', 'reviewservicepro'); ?>
           </h3>
 
@@ -578,9 +722,9 @@ if (! empty($schema_logo_url)) {
                 <li>
                   <a
                     href="<?php echo esc_url($footer_url($service['url'])); ?>"
-                    class="rsp-footer-link group inline-flex items-center gap-2 py-1 text-base font-medium leading-7 text-white transition-colors duration-200 hover:text-[#00C853]">
+                    class="rsp-footer-link group inline-flex items-center gap-2 py-1.5 text-[16px] font-medium leading-7 text-slate-300 transition-colors duration-200 hover:text-[#00C853] focus:outline-none focus:text-[#00C853]">
 
-                    <i data-lucide="<?php echo esc_attr($service['icon']); ?>" class="h-4 w-4 shrink-0 text-white transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-[#00C853]" aria-hidden="true"></i>
+                    <i data-lucide="<?php echo esc_attr($service['icon']); ?>" class="rsp-footer-link-icon h-4 w-4 shrink-0 text-slate-400" aria-hidden="true"></i>
                     <?php echo esc_html($service['label']); ?>
                   </a>
                 </li>
@@ -588,7 +732,7 @@ if (! empty($schema_logo_url)) {
             </ul>
           </nav>
 
-          <h3 class="mb-4 mt-8 border-b border-white/[0.12] pb-3 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-blue-300">
+          <h3 class="rsp-footer-column-title mb-4 mt-9 border-b border-white/[0.12] pb-3 text-[11px] font-[800] uppercase tracking-[0.18em] text-blue-300">
             <?php esc_html_e('Company', 'reviewservicepro'); ?>
           </h3>
 
@@ -598,12 +742,12 @@ if (! empty($schema_logo_url)) {
                 <li>
                   <a
                     href="<?php echo esc_url($footer_url($link['url'])); ?>"
-                    class="rsp-footer-link inline-flex items-center gap-2 py-1 text-base font-medium leading-7 text-white transition-colors duration-200 hover:text-[#00C853]">
+                    class="rsp-footer-link inline-flex items-center gap-2 py-1.5 text-[16px] font-medium leading-7 text-slate-300 transition-colors duration-200 hover:text-[#00C853] focus:outline-none focus:text-[#00C853]">
 
                     <?php echo esc_html($link['label']); ?>
 
                     <?php if (! empty($link['badge'])) : ?>
-                      <span class="rounded-full border border-[#00C853]/35 bg-[#00C853]/15 px-2 py-0.5 text-xs font-black text-white">
+                      <span class="rounded-full border border-[#00C853]/35 bg-[#00C853]/15 px-2 py-0.5 text-xs font-[800] text-emerald-50">
                         <?php echo esc_html($link['badge']); ?>
                       </span>
                     <?php endif; ?>
@@ -616,7 +760,7 @@ if (! empty($schema_logo_url)) {
 
         <!-- Legal + Platforms + Quick Access -->
         <div class="rsp-footer-reveal" data-rsp-footer-reveal>
-          <h3 class="mb-4 border-b border-white/[0.12] pb-3 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-blue-300">
+          <h3 class="rsp-footer-column-title mb-4 border-b border-white/[0.12] pb-3 text-[11px] font-[800] uppercase tracking-[0.18em] text-blue-300">
             <?php esc_html_e('Legal', 'reviewservicepro'); ?>
           </h3>
 
@@ -626,12 +770,12 @@ if (! empty($schema_logo_url)) {
                 <li>
                   <a
                     href="<?php echo esc_url($footer_url($link['url'])); ?>"
-                    class="rsp-footer-link inline-flex items-center gap-2 py-1 text-base font-medium leading-7 text-white transition-colors duration-200 hover:text-[#00C853]">
+                    class="rsp-footer-link inline-flex items-center gap-2 py-1.5 text-[16px] font-medium leading-7 text-slate-300 transition-colors duration-200 hover:text-[#00C853] focus:outline-none focus:text-[#00C853]">
 
                     <?php echo esc_html($link['label']); ?>
 
                     <?php if (! empty($link['badge'])) : ?>
-                      <span class="rounded-full border border-[#00C853]/35 bg-[#00C853]/15 px-2 py-0.5 text-xs font-black text-white">
+                      <span class="rounded-full border border-[#00C853]/35 bg-[#00C853]/15 px-2 py-0.5 text-xs font-[800] text-emerald-50">
                         <?php echo esc_html($link['badge']); ?>
                       </span>
                     <?php endif; ?>
@@ -641,7 +785,7 @@ if (! empty($schema_logo_url)) {
             </ul>
           </nav>
 
-          <h3 class="mb-4 mt-8 border-b border-white/[0.12] pb-3 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-blue-300">
+          <h3 class="rsp-footer-column-title mb-4 mt-9 border-b border-white/[0.12] pb-3 text-[11px] font-[800] uppercase tracking-[0.18em] text-blue-300">
             <?php esc_html_e('Platforms', 'reviewservicepro'); ?>
           </h3>
 
@@ -651,7 +795,7 @@ if (! empty($schema_logo_url)) {
                 <li>
                   <a
                     href="<?php echo esc_url($footer_url($link['url'])); ?>"
-                    class="rsp-footer-link inline-flex items-center gap-2 py-1 text-base font-medium leading-7 text-white transition-colors duration-200 hover:text-[#00C853]">
+                    class="rsp-footer-link inline-flex items-center gap-2 py-1.5 text-[16px] font-medium leading-7 text-slate-300 transition-colors duration-200 hover:text-[#00C853] focus:outline-none focus:text-[#00C853]">
 
                     <?php echo esc_html($link['label']); ?>
                   </a>
@@ -660,7 +804,7 @@ if (! empty($schema_logo_url)) {
             </ul>
           </nav>
 
-          <h3 class="mb-4 mt-8 border-b border-white/[0.12] pb-3 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-blue-300">
+          <h3 class="rsp-footer-column-title mb-4 mt-9 border-b border-white/[0.12] pb-3 text-[11px] font-[800] uppercase tracking-[0.18em] text-blue-300">
             <?php esc_html_e('Quick Access', 'reviewservicepro'); ?>
           </h3>
 
@@ -670,9 +814,9 @@ if (! empty($schema_logo_url)) {
                 <li>
                   <a
                     href="<?php echo esc_url($footer_url($link['url'])); ?>"
-                    class="rsp-footer-link group inline-flex items-center gap-2 py-1 text-base font-medium leading-7 text-white transition-colors duration-200 hover:text-[#00C853]">
+                    class="rsp-footer-link group inline-flex items-center gap-2 py-1.5 text-[16px] font-medium leading-7 text-slate-300 transition-colors duration-200 hover:text-[#00C853] focus:outline-none focus:text-[#00C853]">
 
-                    <i data-lucide="<?php echo esc_attr($link['icon']); ?>" class="h-4 w-4 shrink-0 text-white transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-[#00C853]" aria-hidden="true"></i>
+                    <i data-lucide="<?php echo esc_attr($link['icon']); ?>" class="rsp-footer-link-icon h-4 w-4 shrink-0 text-slate-400" aria-hidden="true"></i>
                     <?php echo esc_html($link['label']); ?>
                   </a>
                 </li>
@@ -685,31 +829,36 @@ if (! empty($schema_logo_url)) {
         <div class="rsp-footer-reveal" data-rsp-footer-reveal>
           <div
             id="rsp-footer-cta-card"
-            class="rsp-footer-float relative mb-5 overflow-hidden rounded-2xl border border-blue-400/30 bg-white/[0.065] p-5 shadow-2xl shadow-blue-950/10 transition-all duration-300 hover:border-blue-400/50 hover:bg-white/[0.085] hover:shadow-blue-900/20">
+            class="rsp-footer-motion-border rsp-footer-float relative mb-5 rounded-2xl border border-blue-400/30 bg-white/[0.065] p-5 shadow-2xl shadow-blue-950/10 transition-all duration-300 hover:border-blue-400/50 hover:bg-white/[0.085] hover:shadow-blue-900/20"
+            style="--rsp-footer-motion-inner:rgba(255,255,255,0.065);">
 
-            <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,#2563EB,#00C853,transparent)] opacity-80"></div>
+            <div class="relative z-10">
+              <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,#2563EB,#00C853,transparent)] opacity-80"></div>
 
-            <h3 class="text-base font-black leading-snug text-white">
-              <?php esc_html_e('Need help improving your reputation?', 'reviewservicepro'); ?>
-            </h3>
+              <h3 class="text-[1.05rem] font-[800] leading-snug tracking-[-0.025em] text-white!">
+                <?php esc_html_e('Need help improving your reputation?', 'reviewservicepro'); ?>
+              </h3>
 
-            <p class="mt-3 text-base leading-8 text-white">
-              <?php esc_html_e("Book a free reputation audit — no obligation, no hard sell. We'll show you exactly where you stand and what to fix first.", 'reviewservicepro'); ?>
-            </p>
+              <p class="mt-3 text-[16px] font-normal leading-8 text-slate-300">
+                <?php esc_html_e("Book a free reputation audit — no obligation, no hard sell. We'll show you exactly where you stand and what to fix first.", 'reviewservicepro'); ?>
+              </p>
 
-            <a
-              href="<?php echo esc_url($footer_url($audit_url)); ?>"
-              class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#2563EB] px-5 py-3.5 text-base font-black text-white shadow-lg shadow-blue-900/30 transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-blue-900/45"
-              aria-label="<?php esc_attr_e('Get a free reputation audit', 'reviewservicepro'); ?>">
+              <a
+                href="<?php echo esc_url($footer_url($audit_url)); ?>"
+                class="rsp-footer-shine mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#2563EB] px-5 py-3.5 text-[16px] font-[800] text-white shadow-lg shadow-blue-900/30 transition-all duration-200 hover:-translate-y-1 hover:bg-blue-700 hover:shadow-blue-900/45 focus:outline-none focus:ring-4 focus:ring-blue-500/20"
+                aria-label="<?php esc_attr_e('Get a free reputation audit', 'reviewservicepro'); ?>">
 
-              <i data-lucide="search" class="h-4 w-4" aria-hidden="true"></i>
-              <?php esc_html_e('Get Free Audit', 'reviewservicepro'); ?>
-              <i data-lucide="arrow-right" class="h-4 w-4" aria-hidden="true"></i>
-            </a>
+                <span class="relative z-10 inline-flex items-center gap-2">
+                  <i data-lucide="search" class="h-4 w-4" aria-hidden="true"></i>
+                  <?php esc_html_e('Get Free Audit', 'reviewservicepro'); ?>
+                  <i data-lucide="arrow-right" class="h-4 w-4" aria-hidden="true"></i>
+                </span>
+              </a>
+            </div>
           </div>
 
           <!-- WhatsApp is contact/support block only, not social row -->
-          <div class="mb-5 flex items-center gap-3 rounded-2xl border border-[#25D366]/30 bg-[#25D366]/10 p-4 shadow-lg shadow-emerald-950/10">
+          <div class="rsp-footer-hover-card mb-5 flex items-center gap-3 rounded-2xl border border-[#25D366]/30 bg-[#25D366]/10 p-4 shadow-lg shadow-emerald-950/10">
             <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#25D366]/30 bg-[#25D366]/10 text-white">
               <svg viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5" aria-hidden="true">
                 <path d="M17.47 14.382c-.294-.148-1.74-.857-2.01-.955-.27-.099-.467-.148-.663.148-.196.295-.76.956-.932 1.152-.172.197-.344.222-.638.074-1.74-.87-2.882-1.552-4.027-3.52-.304-.524.304-.487.868-1.622.099-.196.05-.37-.025-.518-.074-.148-.663-1.597-.908-2.186-.24-.573-.483-.494-.663-.503-.172-.009-.37-.011-.567-.011-.197 0-.517.074-.787.37-.27.295-1.032 1.009-1.032 2.458 0 1.449 1.056 2.848 1.203 3.045.148.196 2.076 3.168 5.034 4.44.703.304 1.252.485 1.68.62.706.224 1.348.192 1.856.116.566-.083 1.74-.71 1.987-1.396.246-.686.246-1.275.172-1.398-.074-.123-.27-.197-.566-.345zm-5.42 7.403h-.004c-1.545-.001-3.065-.415-4.393-1.2l-.315-.187-3.267.856.872-3.185-.205-.327c-.86-1.367-1.315-2.948-1.313-4.572.002-4.731 3.856-8.583 8.59-8.583 2.294.001 4.451.895 6.073 2.519 1.622 1.624 2.514 3.782 2.513 6.077-.002 4.732-3.856 8.583-8.59 8.583zm7.31-15.891C17.208 4.139 14.85 3.2 12.322 3.2c-4.78 0-8.671 3.887-8.673 8.666-.001 1.526.398 3.016 1.157 4.33L3.2 20.8l4.724-1.239c1.265.69 2.69 1.054 4.139 1.054h.004c4.78 0 8.671-3.887 8.673-8.666.001-2.317-.898-4.495-2.532-6.131z" />
@@ -717,7 +866,7 @@ if (! empty($schema_logo_url)) {
             </div>
 
             <div>
-              <p class="text-base font-black leading-6 text-white">
+              <p class="text-[16px] font-[800] leading-6 text-white">
                 <?php esc_html_e('WhatsApp Support', 'reviewservicepro'); ?>
               </p>
 
@@ -725,7 +874,7 @@ if (! empty($schema_logo_url)) {
                 href="<?php echo esc_url($whatsapp_url); ?>"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="text-base font-medium leading-7 text-white transition-colors duration-200 hover:text-[#00C853]"
+                class="text-[16px] font-medium leading-7 text-slate-300 transition-colors duration-200 hover:text-[#00C853]"
                 aria-label="<?php esc_attr_e('Chat with ReviewService.Pro on WhatsApp', 'reviewservicepro'); ?>">
 
                 <?php esc_html_e('+1 (807) 798-0758', 'reviewservicepro'); ?>
@@ -733,7 +882,7 @@ if (! empty($schema_logo_url)) {
             </div>
           </div>
 
-          <h3 class="mb-3 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-blue-300">
+          <h3 class="rsp-footer-column-title mb-3 text-[11px] font-[800] uppercase tracking-[0.18em] text-blue-300">
             <?php esc_html_e('Follow', 'reviewservicepro'); ?>
           </h3>
 
@@ -744,7 +893,7 @@ if (! empty($schema_logo_url)) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="<?php echo esc_attr($social['label']); ?>"
-                class="rsp-footer-social flex h-11 w-11 items-center justify-center rounded-xl border border-white/[0.16] bg-white/[0.07] shadow-lg shadow-black/10 transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:border-white/30 hover:bg-white/[0.14]"
+                class="rsp-footer-social rsp-footer-hover-card flex h-11 w-11 items-center justify-center rounded-xl border border-white/[0.16] bg-white/[0.07] shadow-lg shadow-black/10 transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:border-white/30 hover:bg-white/[0.14] focus:outline-none focus:ring-4 focus:ring-blue-500/20"
                 role="listitem">
 
                 <span
@@ -786,7 +935,7 @@ if (! empty($schema_logo_url)) {
     aria-label="<?php esc_attr_e('Service compliance disclaimer', 'reviewservicepro'); ?>">
 
     <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-      <p class="mx-auto max-w-5xl text-center text-sm font-medium leading-7 text-white">
+      <p class="mx-auto max-w-5xl text-center text-sm font-medium leading-7 text-slate-300">
         <?php esc_html_e('ReviewService.Pro provides ethical online reputation management services. We do not offer, sell, or facilitate fake reviews, paid review incentives, rating manipulation, guaranteed negative review removal, guaranteed 5-star ratings, or any practice that violates platform terms of service. Case study results are scenario-based illustrations and are not guaranteed outcomes.', 'reviewservicepro'); ?>
       </p>
     </div>
@@ -796,16 +945,16 @@ if (! empty($schema_logo_url)) {
   <div class="relative z-10 border-t border-white/[0.08] py-5">
     <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
       <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-        <p class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-medium leading-6 text-white">
+        <p class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-medium leading-6 text-slate-400">
           <span>&copy; <?php echo esc_html(date_i18n('Y')); ?></span>
 
-          <a href="<?php echo esc_url(home_url('/')); ?>" class="font-black text-white transition-colors duration-200 hover:text-[#00C853]">
+          <a href="<?php echo esc_url(home_url('/')); ?>" class="font-[800] text-white transition-colors duration-200 hover:text-[#00C853]">
             <?php esc_html_e('ReviewService.Pro', 'reviewservicepro'); ?>
           </a>
 
-          <span class="text-white/60">·</span>
+          <span class="text-white/40">·</span>
           <span><?php esc_html_e('All rights reserved', 'reviewservicepro'); ?></span>
-          <span class="text-white/60">·</span>
+          <span class="text-white/40">·</span>
           <span><?php esc_html_e('Sheridan, WY 82801, USA', 'reviewservicepro'); ?></span>
         </p>
 
@@ -815,7 +964,7 @@ if (! empty($schema_logo_url)) {
               <li>
                 <a
                   href="<?php echo esc_url($footer_url($url)); ?>"
-                  class="text-sm font-medium text-white transition-colors duration-200 hover:text-[#00C853]">
+                  class="text-sm font-medium text-slate-400 transition-colors duration-200 hover:text-[#00C853]">
                   <?php echo esc_html($label); ?>
                 </a>
               </li>
@@ -860,6 +1009,7 @@ if (! empty($schema_logo_url)) {
           entries.forEach(function(entry) {
             if (entry.isIntersecting) {
               revealItem(entry.target);
+              observer.unobserve(entry.target);
             }
           });
         }, {
@@ -868,7 +1018,7 @@ if (! empty($schema_logo_url)) {
         });
 
         revealItems.forEach(function(item, index) {
-          item.style.transitionDelay = (index * 80) + 'ms';
+          item.style.transitionDelay = Math.min(index * 70, 420) + 'ms';
           observer.observe(item);
         });
       } else {
@@ -876,17 +1026,38 @@ if (! empty($schema_logo_url)) {
       }
 
       var mouseGlow = document.getElementById('rsp-footer-mouse-glow');
+      var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      if (mouseGlow) {
+      if (mouseGlow && !reducedMotion) {
+        var rafId = null;
+        var nextX = '50%';
+        var nextY = '50%';
+
+        function updateGlow() {
+          mouseGlow.style.left = nextX;
+          mouseGlow.style.top = nextY;
+          rafId = null;
+        }
+
         footer.addEventListener('mousemove', function(event) {
           var rect = footer.getBoundingClientRect();
-          mouseGlow.style.left = (event.clientX - rect.left) + 'px';
-          mouseGlow.style.top = (event.clientY - rect.top) + 'px';
+          nextX = (event.clientX - rect.left) + 'px';
+          nextY = (event.clientY - rect.top) + 'px';
+
+          if (!rafId) {
+            rafId = window.requestAnimationFrame(updateGlow);
+          }
+        }, {
+          passive: true
         });
 
         footer.addEventListener('mouseleave', function() {
-          mouseGlow.style.left = '50%';
-          mouseGlow.style.top = '50%';
+          nextX = '50%';
+          nextY = '50%';
+
+          if (!rafId) {
+            rafId = window.requestAnimationFrame(updateGlow);
+          }
         });
       }
     }

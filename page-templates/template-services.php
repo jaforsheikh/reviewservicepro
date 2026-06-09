@@ -23,7 +23,7 @@ if (! defined('ABSPATH')) {
 get_header();
 ?>
 
-<main id="primary" class="site-main bg-white">
+<div id="services-page" class="site-main bg-white">
 
   <?php
   /**
@@ -64,7 +64,7 @@ get_header();
    */
   ?>
 
-</main>
+</div>
 
 <?php
 get_footer();

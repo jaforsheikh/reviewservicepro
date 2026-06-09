@@ -294,7 +294,7 @@ $product_count = is_array($products) ? count($products) : 0;
 
       <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
         <div class="max-w-3xl">
-          <h3 class="text-xl font-bold text-white sm:text-2xl">
+          <h3 class="text-xl font-bold text-white! sm:text-2xl">
             <?php esc_html_e('Need an add-on that is not listed yet?', 'reviewservicepro'); ?>
           </h3>
           <p class="mt-2 text-sm leading-relaxed text-slate-400 sm:text-base">

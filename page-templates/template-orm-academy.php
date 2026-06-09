@@ -91,7 +91,7 @@ $learning_paths = [
 ];
 ?>
 
-<main id="primary" class="site-main">
+<div id="orm-academy-page" class="site-main bg-white">
   <style>
     #rsp-academy-hub {
       --rsp-ac-title: #334155;
@@ -496,21 +496,33 @@ $learning_paths = [
               while ($query_cat->have_posts()) :
                 $query_cat->the_post();
               ?>
-                <article class="bg-white border border-slate-200/70 rounded-2xl p-5 shadow-xs flex flex-col justify-between transition-all hover:border-slate-300">
-                  <div>
-                    <span class="text-[10px] font-mono text-slate-400 block mb-2"><?php echo esc_html(get_the_date()); ?></span>
-                    <h4 class="font-poppins text-sm font-bold text-[#3B4658] tracking-tight mb-2 hover:text-blue-600 transition-colors">
-                      <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-                    </h4>
-                    <p class="font-inter text-xs text-[#64748B] leading-relaxed">
-                      <?php echo wp_kses_post(wp_trim_words(get_the_excerpt(), 18, '...')); ?>
-                    </p>
-                  </div>
-                  <div class="pt-4 mt-4 border-t border-slate-50">
-                    <a href="<?php the_permalink(); ?>" class="text-xs font-bold text-slate-600 hover:text-blue-600 inline-flex items-center gap-1">
-                      <?php esc_html_e('Access Manual', 'reviewservicepro'); ?>
-                      <i data-lucide="arrow-right" class="w-3 h-3"></i>
-                    </a>
+                <article class="group overflow-hidden bg-white border border-slate-200/70 rounded-2xl shadow-[0_12px_36px_rgba(15,23,42,0.055)] flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_18px_52px_rgba(15,23,42,0.09)]">
+                  <a href="<?php the_permalink(); ?>" class="block h-40 overflow-hidden bg-slate-100">
+                    <?php if (has_post_thumbnail()) : ?>
+                      <?php the_post_thumbnail('medium_large', ['class' => 'h-full w-full object-cover transition-transform duration-500 group-hover:scale-105']); ?>
+                    <?php else : ?>
+                      <span class="flex h-full w-full items-center justify-center bg-gradient-to-br from-blue-50 via-white to-emerald-50">
+                        <i data-lucide="file-text" class="w-8 h-8 text-blue-300"></i>
+                      </span>
+                    <?php endif; ?>
+                  </a>
+
+                  <div class="flex flex-1 flex-col justify-between p-5">
+                    <div>
+                      <span class="text-[10px] font-mono text-slate-400 block mb-2"><?php echo esc_html(get_the_date()); ?></span>
+                      <h4 class="font-poppins text-[15px] font-bold text-[#3B4658] tracking-tight leading-snug mb-2 transition-colors group-hover:text-blue-600">
+                        <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                      </h4>
+                      <p class="font-inter text-[13px] text-[#64748B] leading-relaxed">
+                        <?php echo wp_kses_post(wp_trim_words(get_the_excerpt(), 18, '...')); ?>
+                      </p>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-slate-100">
+                      <a href="<?php the_permalink(); ?>" class="text-xs font-bold text-slate-600 hover:text-blue-600 inline-flex items-center gap-1">
+                        <?php esc_html_e('Access Manual', 'reviewservicepro'); ?>
+                        <i data-lucide="arrow-right" class="w-3 h-3 transition-transform group-hover:translate-x-0.5"></i>
+                      </a>
+                    </div>
                   </div>
                 </article>
               <?php endwhile; ?>
@@ -533,7 +545,7 @@ $learning_paths = [
             <?php esc_html_e('Encrypted Operations Report', 'reviewservicepro'); ?>
           </span>
 
-          <h2 class="font-poppins text-3xl sm:text-4xl font-extrabold tracking-tight mb-4 text-white">
+          <h2 class="font-poppins text-3xl sm:text-4xl font-extrabold tracking-tight mb-4 text-white!">
             <?php esc_html_e('Get Weekly ORM Tips', 'reviewservicepro'); ?>
           </h2>
 
@@ -629,7 +641,7 @@ $learning_paths = [
       });
     })();
   </script>
-</main>
+</div>
 
 <?php
 get_footer();

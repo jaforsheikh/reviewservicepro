@@ -22,7 +22,8 @@
 .ind-underline {
   transition: transform 0.8s ease;
 }
-/* final cta */
+
+/* Final CTA */
 @keyframes glow-pulse {
   0%,
   100% {
@@ -33,6 +34,7 @@
     opacity: 0.65;
   }
 }
+
 /* Footer design */
 @keyframes footer-beam {
   0% {
@@ -67,18 +69,7 @@
   animation: footer-glow 6s ease-in-out infinite 3s;
 }
 
-/* Navbar */
-@media (max-width: 782px) {
-  body.admin-bar #site-header {
-    top: 46px;
-  }
-}
-
-@media (min-width: 783px) {
-  body.admin-bar #site-header {
-    top: 32px;
-  }
-}
+/* Navbar / Header safety */
 #site-header {
   position: fixed;
   top: 0;
@@ -97,6 +88,25 @@ body.admin-bar #site-header {
   }
 }
 
-#primary {
-  padding-top: 72px;
+/*
+ * Important:
+ * Do not force #primary padding globally here.
+ * The current header already opens <main id="primary" class="pt-[78px]">.
+ * Adding #primary padding in global CSS creates spacing conflicts on custom templates,
+ * WooCommerce account pages, archives, and pages that already manage their own top spacing.
+ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+
+  .footer-beam,
+  .footer-glow,
+  .footer-glow-delay,
+  .ind-card:hover .ind-sweep {
+    animation: none !important;
+  }
 }

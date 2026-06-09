@@ -747,7 +747,7 @@ $tone_classes = [
 
     <h2
       id="orm-system-ethical-title"
-      class="font-['Poppins'] text-3xl text-white font-extrabold leading-tight tracking-[-0.03em] md:text-5xl">
+      class="font-['Poppins'] text-3xl text-white! font-extrabold leading-tight tracking-[-0.03em] md:text-5xl">
       <?php esc_html_e('A reputation system should', 'reviewservicepro'); ?>
       <span class="block text-emerald-300">
         <?php esc_html_e('build trust safely.', 'reviewservicepro'); ?>

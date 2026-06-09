@@ -960,7 +960,7 @@ $annual_pct = [
             <p class="font-['DM_Mono',monospace] text-[10px] font-medium uppercase tracking-[0.14em] text-white/40">
               <?php esc_html_e('Custom Pricing', 'reviewservicepro'); ?>
             </p>
-            <h4 class="mt-2 font-['Poppins',sans-serif] text-[28px] font-extrabold text-white">
+            <h4 class="mt-2 font-['Poppins',sans-serif] text-[28px] font-extrabold text-white!">
               <?php esc_html_e('Request Quote', 'reviewservicepro'); ?>
             </h4>
             <p class="mt-3 font-['Inter',sans-serif] text-[14px] leading-[1.72] text-white/60">

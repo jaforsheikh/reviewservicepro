@@ -486,7 +486,7 @@ $portal_schema = [
                     <?php esc_html_e('Welcome back', 'reviewservicepro'); ?>
                   </p>
 
-                  <h3 class="mt-1 font-sans text-xl font-black leading-tight text-white">
+                  <h3 class="mt-1 font-sans text-xl font-black leading-tight text-white!">
                     <?php esc_html_e('Your ORM service is active', 'reviewservicepro'); ?>
                   </h3>
 

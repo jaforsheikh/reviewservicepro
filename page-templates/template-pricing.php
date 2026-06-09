@@ -172,8 +172,8 @@ $breadcrumb_schema = [
   #pricing-page {
     color: #020617;
     background:
-      radial-gradient(circle at 16% 8%, rgba(37, 99, 235, 0.10), transparent 34%),
-      radial-gradient(circle at 86% 18%, rgba(0, 200, 83, 0.10), transparent 30%),
+      radial-gradient(circle at 16% 8%, rgba(37, 99, 235, 0.06), transparent 32%),
+      radial-gradient(circle at 86% 18%, rgba(0, 200, 83, 0.06), transparent 28%),
       linear-gradient(180deg, #ffffff 0%, #f8fafc 48%, #ffffff 100%);
   }
 
@@ -181,7 +181,7 @@ $breadcrumb_schema = [
     background-image:
       linear-gradient(rgba(37, 99, 235, 0.055) 1px, transparent 1px),
       linear-gradient(90deg, rgba(37, 99, 235, 0.055) 1px, transparent 1px);
-    background-size: 52px 52px;
+    background-size: 64px 64px;
     mask-image: linear-gradient(to bottom, black 0%, black 78%, transparent 100%);
     -webkit-mask-image: linear-gradient(to bottom, black 0%, black 78%, transparent 100%);
   }
@@ -296,12 +296,5 @@ $breadcrumb_schema = [
 <script type="application/ld+json">
   <?php echo wp_json_encode($breadcrumb_schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>
 </script>
-
-<?php
-/**
- * header.php opens <main id="primary">, so this template closes it.
- */
-?>
-</main>
 
 <?php get_footer(); ?>

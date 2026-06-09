@@ -13,265 +13,265 @@
 defined('ABSPATH') || exit;
 
 if (! function_exists('reviewservicepro_is_checkout_polish_page')) {
-  /**
-   * Check whether the current page should receive checkout polish.
-   *
-   * @return bool
-   */
-  function reviewservicepro_is_checkout_polish_page()
-  {
-    if (! function_exists('is_checkout') || ! is_checkout()) {
-      return false;
-    }
+	/**
+	 * Check whether the current page should receive checkout polish.
+	 *
+	 * @return bool
+	 */
+	function reviewservicepro_is_checkout_polish_page()
+	{
+		if (! function_exists('is_checkout') || ! is_checkout()) {
+			return false;
+		}
 
-    if (function_exists('is_wc_endpoint_url') && is_wc_endpoint_url('order-received')) {
-      return false;
-    }
+		if (function_exists('is_wc_endpoint_url') && is_wc_endpoint_url('order-received')) {
+			return false;
+		}
 
-    return true;
-  }
+		return true;
+	}
 }
 
 if (! function_exists('reviewservicepro_checkout_body_classes')) {
-  /**
-   * Add checkout-specific body classes.
-   *
-   * @param array $classes Body classes.
-   * @return array
-   */
-  function reviewservicepro_checkout_body_classes($classes)
-  {
-    if (reviewservicepro_is_checkout_polish_page()) {
-      $classes[] = 'rsp-checkout-polish-page';
+	/**
+	 * Add checkout-specific body classes.
+	 *
+	 * @param array $classes Body classes.
+	 * @return array
+	 */
+	function reviewservicepro_checkout_body_classes($classes)
+	{
+		if (reviewservicepro_is_checkout_polish_page()) {
+			$classes[] = 'rsp-checkout-polish-page';
 
-      if (function_exists('is_wc_endpoint_url') && is_wc_endpoint_url('order-pay')) {
-        $classes[] = 'rsp-checkout-pay-page';
-      }
-    }
+			if (function_exists('is_wc_endpoint_url') && is_wc_endpoint_url('order-pay')) {
+				$classes[] = 'rsp-checkout-pay-page';
+			}
+		}
 
-    return $classes;
-  }
+		return $classes;
+	}
 }
 add_filter('body_class', 'reviewservicepro_checkout_body_classes');
 
 if (! function_exists('reviewservicepro_checkout_order_button_text')) {
-  /**
-   * Improve the order button label without changing payment/order logic.
-   *
-   * @param string $button_text Default button text.
-   * @return string
-   */
-  function reviewservicepro_checkout_order_button_text($button_text)
-  {
-    if (reviewservicepro_is_checkout_polish_page()) {
-      return esc_html__('Place secure service order', 'reviewservicepro');
-    }
+	/**
+	 * Improve the order button label without changing payment/order logic.
+	 *
+	 * @param string $button_text Default button text.
+	 * @return string
+	 */
+	function reviewservicepro_checkout_order_button_text($button_text)
+	{
+		if (reviewservicepro_is_checkout_polish_page()) {
+			return esc_html__('Place secure service order', 'reviewservicepro');
+		}
 
-    return $button_text;
-  }
+		return $button_text;
+	}
 }
 add_filter('woocommerce_order_button_text', 'reviewservicepro_checkout_order_button_text', 20);
 
 if (! function_exists('reviewservicepro_checkout_intro_panel')) {
-  /**
-   * Output premium checkout intro panel.
-   *
-   * @param WC_Checkout $checkout Checkout object.
-   * @return void
-   */
-  function reviewservicepro_checkout_intro_panel($checkout)
-  {
-    if (! reviewservicepro_is_checkout_polish_page()) {
-      return;
-    }
+	/**
+	 * Output premium checkout intro panel.
+	 *
+	 * @param WC_Checkout $checkout Checkout object.
+	 * @return void
+	 */
+	function reviewservicepro_checkout_intro_panel($checkout)
+	{
+		if (! reviewservicepro_is_checkout_polish_page()) {
+			return;
+		}
 
-    $cart_count = 0;
+		$cart_count = 0;
 
-    if (function_exists('WC') && WC()->cart) {
-      $cart_count = WC()->cart->get_cart_contents_count();
-    }
+		if (function_exists('WC') && WC()->cart) {
+			$cart_count = WC()->cart->get_cart_contents_count();
+		}
 ?>
-    <section class="rsp-checkout-hero" aria-label="<?php echo esc_attr__('Secure service checkout overview', 'reviewservicepro'); ?>">
-      <div class="rsp-checkout-hero__glow" aria-hidden="true"></div>
+		<section class="rsp-checkout-hero" aria-label="<?php echo esc_attr__('Secure service checkout overview', 'reviewservicepro'); ?>">
+			<div class="rsp-checkout-hero__glow" aria-hidden="true"></div>
 
-      <div class="rsp-checkout-hero__content">
-        <div class="rsp-checkout-hero__copy">
-          <p class="rsp-checkout-eyebrow">
-            <span class="rsp-checkout-eyebrow__dot" aria-hidden="true"></span>
-            <?php esc_html_e('Secure ReviewService.Pro checkout', 'reviewservicepro'); ?>
-          </p>
+			<div class="rsp-checkout-hero__content">
+				<div class="rsp-checkout-hero__copy">
+					<p class="rsp-checkout-eyebrow">
+						<span class="rsp-checkout-eyebrow__dot" aria-hidden="true"></span>
+						<?php esc_html_e('Secure ReviewService.Pro checkout', 'reviewservicepro'); ?>
+					</p>
 
-          <h1 class="rsp-checkout-title">
-            <?php esc_html_e('Complete your reputation management service order', 'reviewservicepro'); ?>
-          </h1>
+					<h1 class="rsp-checkout-title">
+						<?php esc_html_e('Complete your reputation management service order', 'reviewservicepro'); ?>
+					</h1>
 
-          <p class="rsp-checkout-description">
-            <?php esc_html_e('Your order will be processed through WooCommerce, then saved inside your account area for onboarding, order tracking, and service documentation.', 'reviewservicepro'); ?>
-          </p>
-        </div>
+					<p class="rsp-checkout-description">
+						<?php esc_html_e('Your order will be processed through WooCommerce, then saved inside your account area for onboarding, order tracking, and service documentation.', 'reviewservicepro'); ?>
+					</p>
+				</div>
 
-        <div class="rsp-checkout-hero__summary">
-          <p class="rsp-checkout-mini-label">
-            <?php esc_html_e('Selected service items', 'reviewservicepro'); ?>
-          </p>
-          <p class="rsp-checkout-mini-number">
-            <?php echo esc_html(number_format_i18n($cart_count)); ?>
-          </p>
-          <p class="rsp-checkout-mini-note">
-            <?php esc_html_e('Review details before placing your secure service order.', 'reviewservicepro'); ?>
-          </p>
-        </div>
-      </div>
+				<div class="rsp-checkout-hero__summary">
+					<p class="rsp-checkout-mini-label">
+						<?php esc_html_e('Selected service items', 'reviewservicepro'); ?>
+					</p>
+					<p class="rsp-checkout-mini-number">
+						<?php echo esc_html(number_format_i18n($cart_count)); ?>
+					</p>
+					<p class="rsp-checkout-mini-note">
+						<?php esc_html_e('Review details before placing your secure service order.', 'reviewservicepro'); ?>
+					</p>
+				</div>
+			</div>
 
-      <div class="rsp-checkout-trust-grid">
-        <div class="rsp-checkout-trust-card">
-          <span class="rsp-checkout-trust-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" focusable="false">
-              <path d="M12 3 5 6v5.6c0 4.3 2.8 7.4 7 8.9 4.2-1.5 7-4.6 7-8.9V6l-7-3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-              <path d="M9.2 12.1l1.8 1.8 3.9-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </span>
-          <div>
-            <strong><?php esc_html_e('Secure payment', 'reviewservicepro'); ?></strong>
-            <span><?php esc_html_e('Payment and order records stay inside WooCommerce.', 'reviewservicepro'); ?></span>
-          </div>
-        </div>
+			<div class="rsp-checkout-trust-grid">
+				<div class="rsp-checkout-trust-card">
+					<span class="rsp-checkout-trust-icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24" fill="none" focusable="false">
+							<path d="M12 3 5 6v5.6c0 4.3 2.8 7.4 7 8.9 4.2-1.5 7-4.6 7-8.9V6l-7-3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+							<path d="M9.2 12.1l1.8 1.8 3.9-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+						</svg>
+					</span>
+					<div>
+						<strong><?php esc_html_e('Secure payment', 'reviewservicepro'); ?></strong>
+						<span><?php esc_html_e('Payment and order records stay inside WooCommerce.', 'reviewservicepro'); ?></span>
+					</div>
+				</div>
 
-        <div class="rsp-checkout-trust-card">
-          <span class="rsp-checkout-trust-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" focusable="false">
-              <path d="M4.5 6.5A2.5 2.5 0 0 1 7 4h10a2.5 2.5 0 0 1 2.5 2.5v11A2.5 2.5 0 0 1 17 20H7a2.5 2.5 0 0 1-2.5-2.5v-11Z" stroke="currentColor" stroke-width="2" />
-              <path d="M8 9h8M8 13h8M8 17h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-            </svg>
-          </span>
-          <div>
-            <strong><?php esc_html_e('Client portal ready', 'reviewservicepro'); ?></strong>
-            <span><?php esc_html_e('Order details appear inside your account after checkout.', 'reviewservicepro'); ?></span>
-          </div>
-        </div>
+				<div class="rsp-checkout-trust-card">
+					<span class="rsp-checkout-trust-icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24" fill="none" focusable="false">
+							<path d="M4.5 6.5A2.5 2.5 0 0 1 7 4h10a2.5 2.5 0 0 1 2.5 2.5v11A2.5 2.5 0 0 1 17 20H7a2.5 2.5 0 0 1-2.5-2.5v-11Z" stroke="currentColor" stroke-width="2" />
+							<path d="M8 9h8M8 13h8M8 17h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+						</svg>
+					</span>
+					<div>
+						<strong><?php esc_html_e('Client portal ready', 'reviewservicepro'); ?></strong>
+						<span><?php esc_html_e('Order details appear inside your account after checkout.', 'reviewservicepro'); ?></span>
+					</div>
+				</div>
 
-        <div class="rsp-checkout-trust-card">
-          <span class="rsp-checkout-trust-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" focusable="false">
-              <path d="M8 11.5 10.5 14 16 8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-width="2" />
-            </svg>
-          </span>
-          <div>
-            <strong><?php esc_html_e('Ethical ORM scope', 'reviewservicepro'); ?></strong>
-            <span><?php esc_html_e('No fake reviews, paid incentives, or guaranteed removal claims.', 'reviewservicepro'); ?></span>
-          </div>
-        </div>
-      </div>
-    </section>
-  <?php
-  }
+				<div class="rsp-checkout-trust-card">
+					<span class="rsp-checkout-trust-icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24" fill="none" focusable="false">
+							<path d="M8 11.5 10.5 14 16 8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+							<path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-width="2" />
+						</svg>
+					</span>
+					<div>
+						<strong><?php esc_html_e('Ethical ORM scope', 'reviewservicepro'); ?></strong>
+						<span><?php esc_html_e('No fake reviews, paid incentives, or guaranteed removal claims.', 'reviewservicepro'); ?></span>
+					</div>
+				</div>
+			</div>
+		</section>
+	<?php
+	}
 }
 add_action('woocommerce_before_checkout_form', 'reviewservicepro_checkout_intro_panel', 4);
 
 if (! function_exists('reviewservicepro_checkout_customer_details_note')) {
-  /**
-   * Output a small helper note before customer details.
-   *
-   * @return void
-   */
-  function reviewservicepro_checkout_customer_details_note()
-  {
-    if (! reviewservicepro_is_checkout_polish_page()) {
-      return;
-    }
-  ?>
-    <div class="rsp-checkout-section-note">
-      <div class="rsp-checkout-section-note__icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" focusable="false">
-          <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="2" />
-          <path d="M4 21a8 8 0 0 1 16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-        </svg>
-      </div>
-      <div>
-        <strong><?php esc_html_e('Client and billing details', 'reviewservicepro'); ?></strong>
-        <span><?php esc_html_e('Use accurate details so onboarding, invoices, and order updates can be connected to the right account.', 'reviewservicepro'); ?></span>
-      </div>
-    </div>
-  <?php
-  }
+	/**
+	 * Output a small helper note before customer details.
+	 *
+	 * @return void
+	 */
+	function reviewservicepro_checkout_customer_details_note()
+	{
+		if (! reviewservicepro_is_checkout_polish_page()) {
+			return;
+		}
+	?>
+		<div class="rsp-checkout-section-note">
+			<div class="rsp-checkout-section-note__icon" aria-hidden="true">
+				<svg viewBox="0 0 24 24" fill="none" focusable="false">
+					<path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="2" />
+					<path d="M4 21a8 8 0 0 1 16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+				</svg>
+			</div>
+			<div>
+				<strong><?php esc_html_e('Client and billing details', 'reviewservicepro'); ?></strong>
+				<span><?php esc_html_e('Use accurate details so onboarding, invoices, and order updates can be connected to the right account.', 'reviewservicepro'); ?></span>
+			</div>
+		</div>
+	<?php
+	}
 }
 add_action('woocommerce_checkout_before_customer_details', 'reviewservicepro_checkout_customer_details_note', 5);
 
 if (! function_exists('reviewservicepro_checkout_after_customer_details_note')) {
-  /**
-   * Output compliance guidance after customer details.
-   *
-   * @return void
-   */
-  function reviewservicepro_checkout_after_customer_details_note()
-  {
-    if (! reviewservicepro_is_checkout_polish_page()) {
-      return;
-    }
-  ?>
-    <div class="rsp-checkout-compliance-note">
-      <div class="rsp-checkout-compliance-note__icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" focusable="false">
-          <path d="M12 9v4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-          <path d="M12 17h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
-          <path d="M10.3 4.3 2.8 17.5A2 2 0 0 0 4.5 20.5h15a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-        </svg>
-      </div>
-      <div>
-        <strong><?php esc_html_e('Ethical service boundary', 'reviewservicepro'); ?></strong>
-        <span><?php esc_html_e('ReviewService.Pro focuses on review monitoring, professional response support, documentation, policy violation checks, and genuine customer feedback workflows. We do not offer fake reviews, paid review incentives, guaranteed 5-star ratings, guaranteed removals, or ranking guarantees.', 'reviewservicepro'); ?></span>
-      </div>
-    </div>
-  <?php
-  }
+	/**
+	 * Output compliance guidance after customer details.
+	 *
+	 * @return void
+	 */
+	function reviewservicepro_checkout_after_customer_details_note()
+	{
+		if (! reviewservicepro_is_checkout_polish_page()) {
+			return;
+		}
+	?>
+		<div class="rsp-checkout-compliance-note">
+			<div class="rsp-checkout-compliance-note__icon" aria-hidden="true">
+				<svg viewBox="0 0 24 24" fill="none" focusable="false">
+					<path d="M12 9v4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+					<path d="M12 17h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+					<path d="M10.3 4.3 2.8 17.5A2 2 0 0 0 4.5 20.5h15a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+				</svg>
+			</div>
+			<div>
+				<strong><?php esc_html_e('Ethical service boundary', 'reviewservicepro'); ?></strong>
+				<span><?php esc_html_e('ReviewService.Pro focuses on review monitoring, professional response support, documentation, policy violation checks, and genuine customer feedback workflows. We do not offer fake reviews, paid review incentives, guaranteed 5-star ratings, guaranteed removals, or ranking guarantees.', 'reviewservicepro'); ?></span>
+			</div>
+		</div>
+	<?php
+	}
 }
 add_action('woocommerce_checkout_after_customer_details', 'reviewservicepro_checkout_after_customer_details_note', 20);
 
 if (! function_exists('reviewservicepro_checkout_order_review_note')) {
-  /**
-   * Output note before the order review area.
-   *
-   * @return void
-   */
-  function reviewservicepro_checkout_order_review_note()
-  {
-    if (! reviewservicepro_is_checkout_polish_page()) {
-      return;
-    }
-  ?>
-    <div class="rsp-checkout-order-note">
-      <p>
-        <?php esc_html_e('Final review: confirm your selected service, total, and payment method before placing the order.', 'reviewservicepro'); ?>
-      </p>
-    </div>
+	/**
+	 * Output note before the order review area.
+	 *
+	 * @return void
+	 */
+	function reviewservicepro_checkout_order_review_note()
+	{
+		if (! reviewservicepro_is_checkout_polish_page()) {
+			return;
+		}
+	?>
+		<div class="rsp-checkout-order-note">
+			<p>
+				<?php esc_html_e('Final review: confirm your selected service, total, and payment method before placing the order.', 'reviewservicepro'); ?>
+			</p>
+		</div>
 <?php
-  }
+	}
 }
 add_action('woocommerce_checkout_before_order_review', 'reviewservicepro_checkout_order_review_note', 5);
 
 if (! function_exists('reviewservicepro_enqueue_checkout_polish_styles')) {
-  /**
-   * Enqueue checkout polish styles.
-   *
-   * @return void
-   */
-  function reviewservicepro_enqueue_checkout_polish_styles()
-  {
-    if (! reviewservicepro_is_checkout_polish_page()) {
-      return;
-    }
+	/**
+	 * Enqueue checkout polish styles.
+	 *
+	 * @return void
+	 */
+	function reviewservicepro_enqueue_checkout_polish_styles()
+	{
+		if (! reviewservicepro_is_checkout_polish_page()) {
+			return;
+		}
 
-    wp_register_style(
-      'reviewservicepro-checkout-polish',
-      false,
-      array(),
-      '1.0.0'
-    );
+		wp_register_style(
+			'reviewservicepro-checkout-polish',
+			false,
+			array(),
+			'1.0.0'
+		);
 
-    wp_enqueue_style('reviewservicepro-checkout-polish');
+		wp_enqueue_style('reviewservicepro-checkout-polish');
 
-    $custom_css = '
+		$custom_css = '
 			body.rsp-checkout-polish-page {
 				background: #F8FAFC;
 			}
@@ -1115,7 +1115,7 @@ if (! function_exists('reviewservicepro_enqueue_checkout_polish_styles')) {
 			}
 		';
 
-    wp_add_inline_style('reviewservicepro-checkout-polish', $custom_css);
-  }
+		wp_add_inline_style('reviewservicepro-checkout-polish', $custom_css);
+	}
 }
 add_action('wp_enqueue_scripts', 'reviewservicepro_enqueue_checkout_polish_styles', 30);

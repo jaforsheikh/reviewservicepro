@@ -1,270 +1,402 @@
 <?php
 
 /**
- * My Account Navigation
+ * My Account navigation
+ *
+ * ReviewService.Pro — Compact SaaS Client Portal Sidebar
  *
  * File: woocommerce/myaccount/navigation.php
- *
- * ReviewService.Pro custom WooCommerce My Account navigation.
- *
- * Purpose:
- * - Turn default WooCommerce account navigation into a premium client portal sidebar.
- * - Preserve WooCommerce endpoint URLs and active states.
- * - Keep responsive mobile layout.
- * - Keep enough negative space and premium visual hierarchy.
  *
  * @package ReviewServicePro
  */
 
 defined('ABSPATH') || exit;
 
-$menu_items = function_exists('wc_get_account_menu_items') ? wc_get_account_menu_items() : [];
-
 $current_user = wp_get_current_user();
 
-$display_name = $current_user instanceof WP_User && $current_user->exists()
+$display_name = ($current_user instanceof WP_User && $current_user->exists())
   ? $current_user->display_name
   : __('Client', 'reviewservicepro');
 
-$user_email = $current_user instanceof WP_User && $current_user->exists()
+$user_email = ($current_user instanceof WP_User && $current_user->exists())
   ? $current_user->user_email
   : '';
 
-$pricing_url = home_url('/pricing/');
-$support_url = home_url('/contact/?type=client-support');
+$menu_items = wc_get_account_menu_items();
 
-$endpoint_icons = [
+$support_url = home_url('/contact/?type=support');
+$audit_url   = home_url('/contact/?type=audit');
+
+$icon_map = [
   'dashboard'       => 'layout-dashboard',
   'orders'          => 'package-check',
-  'downloads'       => 'file-down',
+  'downloads'       => 'download',
   'edit-address'    => 'map-pin',
   'payment-methods' => 'credit-card',
   'edit-account'    => 'user-cog',
   'customer-logout' => 'log-out',
-
-  /**
-   * Future ReviewService.Pro custom endpoints.
-   */
-  'my-project'            => 'folder-kanban',
-  'onboarding'            => 'clipboard-list',
-  'reputation-snapshot'   => 'activity',
-  'local-seo'             => 'map',
-  'review-responses'      => 'message-square-text',
-  'negative-review-cases' => 'shield-alert',
-  'review-request-system' => 'send',
-  'reports'               => 'file-text',
-  'support'               => 'life-buoy',
 ];
 
+$render_icon = static function ($icon, $classes = 'h-4 w-4') {
+  if (function_exists('rsp_icon')) {
+    return wp_kses_post(rsp_icon($icon, $classes));
+  }
+
+  return '<i data-lucide="' . esc_attr($icon) . '" class="' . esc_attr($classes) . '" aria-hidden="true"></i>';
+};
 ?>
 
-<style>
-  .rsp-account-navigation {
-    color: #ffffff;
-  }
-
-  .rsp-account-navigation-card {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .rsp-account-navigation-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    background:
-      radial-gradient(380px circle at var(--rsp-nav-x, 50%) var(--rsp-nav-y, 50%), rgba(37, 99, 235, 0.14), transparent 42%),
-      radial-gradient(300px circle at var(--rsp-nav-x, 50%) var(--rsp-nav-y, 50%), rgba(0, 200, 83, 0.10), transparent 38%);
-    transition: opacity 220ms ease;
-    pointer-events: none;
-  }
-
-  .rsp-account-navigation-card:hover::before {
-    opacity: 1;
-  }
-
-  .rsp-account-navigation-beam {
-    animation: rspAccountNavigationBeam 8s ease-in-out infinite;
-  }
-
-  @keyframes rspAccountNavigationBeam {
-    0% {
-      transform: translateX(-120%);
-    }
-
-    100% {
-      transform: translateX(120%);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .rsp-account-navigation-beam {
-      animation: none;
-    }
-  }
-</style>
-
 <nav
-  class="woocommerce-MyAccount-navigation rsp-account-navigation mb-8 lg:mb-10"
-  aria-label="<?php esc_attr_e('Account pages', 'reviewservicepro'); ?>">
+  class="woocommerce-MyAccount-navigation rsp-account-nav"
+  aria-label="<?php echo esc_attr__('Account pages', 'woocommerce'); ?>">
 
-  <div
-    class="rsp-account-navigation-card rounded-[2rem] border border-white/[0.08] bg-[#07111F] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.22)] backdrop-blur-xl sm:p-6 lg:p-7"
-    data-rsp-account-navigation-card>
+  <style>
+    .rsp-account-nav {
+      width: 100%;
+    }
 
-    <div class="pointer-events-none absolute inset-x-0 top-0 h-px overflow-hidden bg-white/10">
-      <div class="rsp-account-navigation-beam h-full w-[70%] bg-[linear-gradient(90deg,transparent,#2563EB,#00C853,transparent)]"></div>
-    </div>
+    .rsp-account-nav-shell {
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 24px;
+      background: #ffffff;
+      padding: 14px;
+      box-shadow: 0 18px 55px rgba(15, 23, 42, 0.07);
+    }
 
-    <div class="relative z-10">
+    .rsp-account-nav-profile {
+      border: 1px solid #DBEAFE;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #EFF6FF 0%, #ffffff 55%, #ECFDF5 100%);
+      padding: 16px;
+    }
 
-      <!-- Client profile summary -->
-      <div class="rounded-[1.5rem] border border-white/[0.08] bg-white/[0.045] p-5">
-        <div class="flex items-center gap-4">
-          <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-[#00C853]/25 bg-[#00C853]/10 text-lg font-semibold text-[#6DFFB0]">
-            <?php echo esc_html(mb_strtoupper(mb_substr($display_name, 0, 1))); ?>
-          </div>
+    .rsp-account-nav-profile-inner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
 
-          <div class="min-w-0">
-            <p class="truncate text-base font-semibold tracking-[-0.025em] text-white">
-              <?php echo esc_html($display_name); ?>
-            </p>
+    .rsp-account-nav-avatar {
+      display: inline-flex;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 auto;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #BFDBFE;
+      border-radius: 14px;
+      background: #ffffff;
+      color: #2563EB;
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.08);
+    }
 
-            <?php if ($user_email) : ?>
-              <p class="mt-1 truncate text-sm font-normal text-slate-400">
-                <?php echo esc_html($user_email); ?>
-              </p>
-            <?php endif; ?>
-          </div>
+    .rsp-account-nav-kicker {
+      font-family: "DM Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      line-height: 1;
+      text-transform: uppercase;
+      color: #2563EB;
+    }
+
+    .rsp-account-nav-name {
+      margin-top: 6px;
+      overflow: hidden;
+      color: #334155;
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.035em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .rsp-account-nav-email {
+      margin-top: 4px;
+      overflow: hidden;
+      color: #64748B;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.3;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .rsp-account-nav ul {
+      display: grid;
+      gap: 8px;
+      margin: 14px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .rsp-account-nav li {
+      margin: 0;
+      padding: 0;
+    }
+
+    .rsp-account-nav-link {
+      position: relative;
+      display: flex;
+      min-height: 48px;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #E2E8F0;
+      border-radius: 14px;
+      background: #ffffff;
+      padding: 10px 12px;
+      color: #3B4658;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.25;
+      text-decoration: none;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.035);
+      transition:
+        transform 200ms cubic-bezier(0.2, 0.9, 0.2, 1),
+        border-color 200ms ease,
+        background-color 200ms ease,
+        color 200ms ease,
+        box-shadow 200ms ease;
+    }
+
+    .rsp-account-nav-link:hover,
+    .rsp-account-nav-link:focus-visible {
+      transform: translateY(-2px);
+      border-color: #BFDBFE;
+      background: #EFF6FF;
+      color: #2563EB;
+      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.08);
+      outline: none;
+    }
+
+    .rsp-account-nav-link.is-active {
+      border-color: #BFDBFE;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.10), rgba(20, 184, 166, 0.07));
+      color: #2563EB;
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.10);
+    }
+
+    .rsp-account-nav-icon {
+      display: inline-flex;
+      width: 30px;
+      height: 30px;
+      flex: 0 0 auto;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+      background: #F8FAFC;
+      color: #64748B;
+      transition:
+        transform 200ms ease,
+        background-color 200ms ease,
+        color 200ms ease,
+        border-color 200ms ease;
+    }
+
+    .rsp-account-nav-link:hover .rsp-account-nav-icon,
+    .rsp-account-nav-link.is-active .rsp-account-nav-icon {
+      transform: scale(1.04);
+      border-color: rgba(37, 99, 235, 0.16);
+      background: #2563EB;
+      color: #ffffff;
+    }
+
+    .rsp-account-nav-active-dot {
+      margin-left: auto;
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #00C853;
+      box-shadow: 0 0 0 4px rgba(0, 200, 83, 0.12);
+    }
+
+    .rsp-account-nav-actions {
+      display: grid;
+      gap: 9px;
+      margin-top: 14px;
+    }
+
+    .rsp-account-nav-support,
+    .rsp-account-nav-audit {
+      display: inline-flex;
+      min-height: 46px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.2;
+      text-decoration: none;
+      transition:
+        transform 200ms ease,
+        background-color 200ms ease,
+        border-color 200ms ease,
+        color 200ms ease,
+        box-shadow 200ms ease;
+    }
+
+    .rsp-account-nav-support {
+      border: 1px solid #E2E8F0;
+      background: #ffffff;
+      color: #3B4658;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.035);
+    }
+
+    .rsp-account-nav-audit {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #2563EB;
+      background: #2563EB;
+      color: #ffffff;
+      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.18);
+    }
+
+    .rsp-account-nav-audit::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -120%;
+      width: 70%;
+      height: 100%;
+      transform: skewX(-18deg);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+      transition: left 650ms ease;
+      pointer-events: none;
+    }
+
+    .rsp-account-nav-support:hover,
+    .rsp-account-nav-audit:hover {
+      transform: translateY(-2px);
+    }
+
+    .rsp-account-nav-support:hover {
+      border-color: #BBF7D0;
+      background: #ECFDF5;
+      color: #047857;
+    }
+
+    .rsp-account-nav-audit:hover {
+      background: #1D4ED8;
+      color: #ffffff;
+      box-shadow: 0 16px 34px rgba(37, 99, 235, 0.24);
+    }
+
+    .rsp-account-nav-audit:hover::before {
+      left: 130%;
+    }
+
+    @media (max-width: 1024px) {
+      .rsp-account-nav ul {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .rsp-account-nav-actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+
+      .rsp-account-nav ul,
+      .rsp-account-nav-actions {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      .rsp-account-nav-link,
+      .rsp-account-nav-icon,
+      .rsp-account-nav-support,
+      .rsp-account-nav-audit,
+      .rsp-account-nav-audit::before {
+        transition-duration: 0.001ms !important;
+      }
+
+      .rsp-account-nav-audit::before {
+        display: none;
+      }
+    }
+  </style>
+
+  <div class="rsp-account-nav-shell">
+    <div class="rsp-account-nav-profile">
+      <div class="rsp-account-nav-profile-inner">
+        <div class="rsp-account-nav-avatar">
+          <?php echo $render_icon('user-round-check', 'h-5 w-5'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+          ?>
         </div>
 
-        <div class="mt-5 rounded-2xl border border-blue-400/20 bg-blue-500/[0.08] p-4">
-          <p class="text-xs font-medium uppercase tracking-[0.14em] text-blue-200">
+        <div class="min-w-0">
+          <p class="rsp-account-nav-kicker">
             <?php esc_html_e('Client Portal', 'reviewservicepro'); ?>
           </p>
 
-          <p class="mt-2 text-sm font-normal leading-6 text-slate-300">
-            <?php esc_html_e('Track orders, onboarding, support, and reputation service progress.', 'reviewservicepro'); ?>
+          <p class="rsp-account-nav-name">
+            <?php echo esc_html($display_name); ?>
           </p>
+
+          <?php if (! empty($user_email)) : ?>
+            <p class="rsp-account-nav-email">
+              <?php echo esc_html($user_email); ?>
+            </p>
+          <?php endif; ?>
         </div>
       </div>
+    </div>
 
-      <!-- Navigation links -->
-      <ul class="mt-5 grid grid-cols-1 gap-2 p-0 lg:gap-3" role="list">
-        <?php foreach ($menu_items as $endpoint => $label) : ?>
-          <?php
-          $classes = function_exists('wc_get_account_menu_item_classes')
-            ? wc_get_account_menu_item_classes($endpoint)
-            : '';
+    <ul>
+      <?php foreach ($menu_items as $endpoint => $label) : ?>
+        <?php
+        $classes      = wc_get_account_menu_item_classes($endpoint);
+        $is_active    = false !== strpos($classes, 'is-active');
+        $icon         = $icon_map[$endpoint] ?? 'circle-dot';
+        $endpoint_url = wc_get_account_endpoint_url($endpoint);
+        ?>
 
-          $is_active = false !== strpos((string) $classes, 'is-active');
+        <li class="<?php echo esc_attr($classes); ?>">
+          <a
+            href="<?php echo esc_url($endpoint_url); ?>"
+            class="rsp-account-nav-link <?php echo $is_active ? 'is-active' : ''; ?>"
+            aria-current="<?php echo $is_active ? 'page' : 'false'; ?>">
+            <span class="rsp-account-nav-icon">
+              <?php echo $render_icon($icon, 'h-4 w-4'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+              ?>
+            </span>
 
-          $icon = isset($endpoint_icons[$endpoint])
-            ? $endpoint_icons[$endpoint]
-            : 'circle';
+            <span class="truncate">
+              <?php echo esc_html($label); ?>
+            </span>
 
-          $url = function_exists('wc_get_account_endpoint_url')
-            ? wc_get_account_endpoint_url($endpoint)
-            : '#';
+            <?php if ($is_active) : ?>
+              <span class="rsp-account-nav-active-dot" aria-hidden="true"></span>
+            <?php endif; ?>
+          </a>
+        </li>
+      <?php endforeach; ?>
+    </ul>
 
-          $base_classes = 'group flex items-center justify-between gap-3 rounded-2xl border px-4 py-3.5 text-sm font-medium transition-all duration-300';
+    <div class="rsp-account-nav-actions">
+      <a href="<?php echo esc_url($support_url); ?>" class="rsp-account-nav-support">
+        <?php echo $render_icon('message-circle', 'h-4 w-4'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+        ?>
+        <?php esc_html_e('Support', 'reviewservicepro'); ?>
+      </a>
 
-          $state_classes = $is_active
-            ? 'border-[#00C853]/25 bg-[#00C853]/10 text-white shadow-[0_12px_34px_rgba(0,200,83,0.10)]'
-            : 'border-white/[0.08] bg-white/[0.035] text-slate-300 hover:-translate-y-0.5 hover:border-blue-400/25 hover:bg-blue-500/[0.08] hover:text-white';
-
-          if ('customer-logout' === $endpoint) {
-            $state_classes = $is_active
-              ? 'border-red-300/25 bg-red-400/10 text-white'
-              : 'border-red-300/15 bg-red-400/[0.055] text-red-100 hover:-translate-y-0.5 hover:border-red-300/25 hover:bg-red-400/10';
-          }
+      <a href="<?php echo esc_url($audit_url); ?>" class="rsp-account-nav-audit">
+        <span class="relative z-10 inline-flex items-center gap-2">
+          <?php echo $render_icon('search-check', 'h-4 w-4'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
           ?>
-
-          <li class="<?php echo esc_attr($classes); ?> m-0 list-none">
-            <a
-              href="<?php echo esc_url($url); ?>"
-              class="<?php echo esc_attr($base_classes . ' ' . $state_classes); ?>">
-
-              <span class="flex min-w-0 items-center gap-3">
-                <span class="<?php echo esc_attr($is_active ? 'border-[#00C853]/25 bg-[#00C853]/10 text-[#6DFFB0]' : 'border-white/[0.08] bg-white/[0.045] text-slate-300 group-hover:border-blue-400/25 group-hover:bg-blue-500/10 group-hover:text-blue-200'); ?> flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border transition-all duration-300">
-                  <i data-lucide="<?php echo esc_attr($icon); ?>" class="h-4.5 w-4.5" aria-hidden="true"></i>
-                </span>
-
-                <span class="truncate">
-                  <?php echo esc_html($label); ?>
-                </span>
-              </span>
-
-              <?php if ($is_active) : ?>
-                <span class="h-2 w-2 shrink-0 rounded-full bg-[#00C853] shadow-[0_0_18px_rgba(0,200,83,0.7)]"></span>
-              <?php else : ?>
-                <i data-lucide="chevron-right" class="h-4 w-4 shrink-0 opacity-60 transition-all duration-300 group-hover:translate-x-0.5 group-hover:opacity-100" aria-hidden="true"></i>
-              <?php endif; ?>
-            </a>
-          </li>
-        <?php endforeach; ?>
-      </ul>
-
-      <!-- Portal actions -->
-      <div class="mt-6 grid grid-cols-1 gap-3">
-        <a
-          href="<?php echo esc_url($pricing_url); ?>"
-          class="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#2563EB] px-5 py-3.5 text-base font-medium text-white shadow-lg shadow-blue-600/25 transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-700">
-
-          <?php esc_html_e('Order New Service', 'reviewservicepro'); ?>
-          <i data-lucide="arrow-right" class="h-4 w-4" aria-hidden="true"></i>
-        </a>
-
-        <a
-          href="<?php echo esc_url($support_url); ?>"
-          class="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/[0.12] bg-white/[0.045] px-5 py-3.5 text-base font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/[0.075]">
-
-          <?php esc_html_e('Contact Support', 'reviewservicepro'); ?>
-          <i data-lucide="life-buoy" class="h-4 w-4" aria-hidden="true"></i>
-        </a>
-      </div>
-
-      <!-- Compliance note -->
-      <div class="mt-6 rounded-2xl border border-amber-300/20 bg-amber-300/[0.055] p-4">
-        <div class="flex gap-3">
-          <i data-lucide="shield-alert" class="mt-0.5 h-5 w-5 shrink-0 text-amber-200" aria-hidden="true"></i>
-
-          <p class="text-sm font-normal leading-6 text-slate-300">
-            <?php esc_html_e('Ethical ORM only: no fake reviews, paid review incentives, rating manipulation, guaranteed removals, or ranking guarantees.', 'reviewservicepro'); ?>
-          </p>
-        </div>
-      </div>
-
+          <?php esc_html_e('Free Audit', 'reviewservicepro'); ?>
+        </span>
+      </a>
     </div>
   </div>
 </nav>
-
-<script>
-  (function() {
-    function initRspAccountNavigation() {
-      if (window.lucide && typeof window.lucide.createIcons === 'function') {
-        window.lucide.createIcons();
-      }
-
-      var cards = document.querySelectorAll('[data-rsp-account-navigation-card]');
-
-      cards.forEach(function(card) {
-        card.addEventListener('mousemove', function(event) {
-          var rect = card.getBoundingClientRect();
-          var x = ((event.clientX - rect.left) / rect.width) * 100;
-          var y = ((event.clientY - rect.top) / rect.height) * 100;
-
-          card.style.setProperty('--rsp-nav-x', x + '%');
-          card.style.setProperty('--rsp-nav-y', y + '%');
-        });
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initRspAccountNavigation);
-    } else {
-      initRspAccountNavigation();
-    }
-  })();
-</script>

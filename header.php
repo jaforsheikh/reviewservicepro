@@ -14,6 +14,13 @@ if (! defined('ABSPATH')) {
   exit;
 }
 
+$current_path = '/';
+
+if (isset($_SERVER['REQUEST_URI'])) {
+  $request_path = parse_url(wp_unslash((string) $_SERVER['REQUEST_URI']), PHP_URL_PATH);
+  $current_path = trailingslashit($request_path ? $request_path : '/');
+}
+
 $header_url = function ($url) {
   $url = (string) $url;
 
@@ -32,6 +39,16 @@ $header_url = function ($url) {
   return home_url($url);
 };
 
+$is_active_url = function ($url) use ($current_path) {
+  $url = (string) $url;
+
+  if ('/' === $url) {
+    return is_front_page();
+  }
+
+  return 0 === strpos($current_path, trailingslashit($url));
+};
+
 $nav_items = [
   [
     'label' => __('Home', 'reviewservicepro'),
@@ -48,14 +65,6 @@ $nav_items = [
   [
     'label' => __('Platforms', 'reviewservicepro'),
     'url'   => '/platforms/',
-  ],
-  [
-    'label' => __('About', 'reviewservicepro'),
-    'url'   => '/about/',
-  ],
-  [
-    'label' => __('Contact', 'reviewservicepro'),
-    'url'   => '/contact/',
   ],
 ];
 
@@ -79,6 +88,15 @@ $resource_items = [
     'icon'        => 'shield-check',
   ],
 ];
+
+$resources_active = false;
+
+foreach ($resource_items as $resource_item) {
+  if ($is_active_url($resource_item['url'])) {
+    $resources_active = true;
+    break;
+  }
+}
 
 $audit_url  = get_theme_mod('header_audit_url', '/contact/?type=audit');
 $portal_url = function_exists('wc_get_page_permalink') ? wc_get_page_permalink('myaccount') : home_url('/my-account/');
@@ -165,6 +183,7 @@ $render_icon = function ($icon, $classes = 'h-4 w-4') {
       position: relative;
       overflow: hidden;
       font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      white-space: nowrap;
     }
 
     .rsp-header-nav-item::after {
@@ -187,10 +206,28 @@ $render_icon = function ($icon, $classes = 'h-4 w-4') {
       transform: scaleX(1);
     }
 
+    .rsp-header-dropdown {
+      position: relative;
+      margin-top: -14px;
+      margin-bottom: -14px;
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+
+    .rsp-header-dropdown::after {
+      content: "";
+      position: absolute;
+      left: -18px;
+      right: -18px;
+      top: 100%;
+      height: 18px;
+      pointer-events: auto;
+    }
+
     .rsp-header-dropdown-panel {
       opacity: 0;
       visibility: hidden;
-      transform: translateY(12px) scale(0.98);
+      transform: translateY(10px) scale(0.985);
       pointer-events: none;
       transition:
         opacity 220ms ease,
@@ -205,6 +242,12 @@ $render_icon = function ($icon, $classes = 'h-4 w-4') {
       visibility: visible;
       transform: translateY(0) scale(1);
       pointer-events: auto;
+    }
+
+    .rsp-header-dropdown:hover .rsp-resources-chevron,
+    .rsp-header-dropdown:focus-within .rsp-resources-chevron,
+    .rsp-header-dropdown.is-open .rsp-resources-chevron {
+      transform: rotate(180deg);
     }
 
     .rsp-header-dropdown-card {
@@ -254,6 +297,7 @@ $render_icon = function ($icon, $classes = 'h-4 w-4') {
       position: relative;
       overflow: hidden;
       font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      white-space: nowrap;
     }
 
     .rsp-header-cta::before {
@@ -337,7 +381,7 @@ $render_icon = function ($icon, $classes = 'h-4 w-4') {
           href="<?php echo esc_url(home_url('/')); ?>"
           class="rsp-header-logo inline-flex items-baseline rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20"
           aria-label="<?php esc_attr_e('Go to ReviewService.Pro homepage', 'reviewservicepro'); ?>">
-          <span class="text-[1.78rem] font-black leading-none tracking-[-0.06em] text-[#334155] sm:text-[2rem]">
+          <span class="text-[1.78rem] font-medium leading-none tracking-[-0.06em] text-[#334155] sm:text-[2rem]">
             ReviewService<span class="text-[#00C853]">.Pro</span>
           </span>
         </a>
@@ -346,10 +390,10 @@ $render_icon = function ($icon, $classes = 'h-4 w-4') {
           class="hidden items-center gap-1 lg:flex"
           aria-label="<?php esc_attr_e('Primary navigation', 'reviewservicepro'); ?>">
 
-          <?php foreach (array_slice($nav_items, 0, 4) as $item) : ?>
+          <?php foreach ($nav_items as $item) : ?>
             <?php
             $item_url  = $header_url($item['url']);
-            $is_active = (('/' === $item['url'] && is_front_page()) || ('/' !== $item['url'] && 0 === strpos(trailingslashit((string) $_SERVER['REQUEST_URI']), trailingslashit($item['url']))));
+            $is_active = $is_active_url($item['url']);
             ?>
             <a
               href="<?php echo esc_url($item_url); ?>"
@@ -358,19 +402,21 @@ $render_icon = function ($icon, $classes = 'h-4 w-4') {
             </a>
           <?php endforeach; ?>
 
-          <div class="rsp-header-dropdown relative" data-rsp-resources-dropdown>
+          <div class="rsp-header-dropdown" data-rsp-resources-dropdown>
             <button
               type="button"
-              class="rsp-header-nav-item inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-[15px] font-[700] leading-6 text-[#3B4658] transition-all duration-200 hover:bg-blue-50 hover:text-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/15"
+              class="rsp-header-nav-item <?php echo $resources_active ? 'is-active bg-blue-50 text-blue-700' : 'text-[#3B4658]'; ?> inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-[15px] font-[700] leading-6 transition-all duration-200 hover:bg-blue-50 hover:text-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/15"
               aria-haspopup="true"
-              aria-expanded="false"
+              aria-expanded="<?php echo $resources_active ? 'true' : 'false'; ?>"
               data-rsp-resources-toggle>
               <?php esc_html_e('Resources', 'reviewservicepro'); ?>
-              <?php echo $render_icon('chevron-down', 'h-4 w-4 transition-transform duration-200'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
-              ?>
+              <span class="rsp-resources-chevron inline-flex transition-transform duration-200">
+                <?php echo $render_icon('chevron-down', 'h-4 w-4'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+                ?>
+              </span>
             </button>
 
-            <div class="rsp-header-dropdown-panel absolute left-1/2 top-full z-50 mt-4 w-[430px] -translate-x-1/2 rounded-[1.5rem] border border-slate-200 bg-white p-3 shadow-[0_24px_90px_rgba(15,23,42,0.14)]">
+            <div class="rsp-header-dropdown-panel absolute left-1/2 top-full z-50 mt-0 w-[430px] -translate-x-1/2 rounded-[1.5rem] border border-slate-200 bg-white p-3 shadow-[0_24px_90px_rgba(15,23,42,0.14)]">
               <div class="mb-2 border-b border-slate-100 px-3 pb-3 pt-2">
                 <p class="font-['DM_Mono',monospace] text-[10px] font-[800] uppercase tracking-[0.16em] text-blue-700">
                   <?php esc_html_e('Resources', 'reviewservicepro'); ?>
@@ -404,24 +450,12 @@ $render_icon = function ($icon, $classes = 'h-4 w-4') {
               </div>
             </div>
           </div>
-
-          <?php foreach (array_slice($nav_items, 4) as $item) : ?>
-            <?php
-            $item_url  = $header_url($item['url']);
-            $is_active = 0 === strpos(trailingslashit((string) $_SERVER['REQUEST_URI']), trailingslashit($item['url']));
-            ?>
-            <a
-              href="<?php echo esc_url($item_url); ?>"
-              class="rsp-header-nav-item <?php echo $is_active ? 'is-active bg-blue-50 text-blue-700' : 'text-[#3B4658]'; ?> rounded-full px-4 py-2.5 text-[15px] font-[700] leading-6 transition-all duration-200 hover:bg-blue-50 hover:text-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/15">
-              <?php echo esc_html($item['label']); ?>
-            </a>
-          <?php endforeach; ?>
         </nav>
 
         <div class="hidden items-center gap-3 lg:flex">
           <a
             href="<?php echo esc_url($portal_url); ?>"
-            class="inline-flex min-h-[48px] items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 font-['Inter',sans-serif] text-[15px] font-[800] text-[#3B4658] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/15">
+            class="inline-flex min-h-[48px] items-center gap-2 whitespace-nowrap rounded-2xl border border-slate-200 bg-white px-4 py-3 font-['Inter',sans-serif] text-[15px] font-[800] text-[#3B4658] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/15">
             <?php echo $render_icon('layout-dashboard', 'h-4 w-4'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
             ?>
             <?php esc_html_e('Portal', 'reviewservicepro'); ?>
@@ -432,7 +466,7 @@ $render_icon = function ($icon, $classes = 'h-4 w-4') {
             class="rsp-header-cta inline-flex min-h-[48px] items-center gap-2 rounded-2xl bg-[#2563EB] px-5 py-3 font-['Inter',sans-serif] text-[15px] font-[800] text-white shadow-[0_14px_34px_rgba(37,99,235,0.24)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-500/20">
             <?php echo $render_icon('search-check', 'relative z-10 h-4 w-4'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
             ?>
-            <span class="relative z-10"><?php esc_html_e('Free Audit', 'reviewservicepro'); ?></span>
+            <span class="relative z-10 whitespace-nowrap"><?php esc_html_e('Free Audit', 'reviewservicepro'); ?></span>
           </a>
         </div>
 
@@ -457,7 +491,7 @@ $render_icon = function ($icon, $classes = 'h-4 w-4') {
       class="hidden border-t border-slate-200 bg-white/98 px-4 pb-5 pt-3 shadow-2xl shadow-slate-900/10 backdrop-blur-xl lg:hidden">
 
       <nav class="mx-auto flex max-w-7xl flex-col gap-2" aria-label="<?php esc_attr_e('Mobile navigation', 'reviewservicepro'); ?>">
-        <?php foreach (array_slice($nav_items, 0, 4) as $item) : ?>
+        <?php foreach ($nav_items as $item) : ?>
           <a
             href="<?php echo esc_url($header_url($item['url'])); ?>"
             class="rounded-xl border border-slate-200 bg-white px-4 py-3 font-['Inter',sans-serif] text-base font-[700] leading-6 text-[#3B4658] shadow-sm transition-all duration-200 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700">
@@ -484,14 +518,6 @@ $render_icon = function ($icon, $classes = 'h-4 w-4') {
             <?php endforeach; ?>
           </div>
         </div>
-
-        <?php foreach (array_slice($nav_items, 4) as $item) : ?>
-          <a
-            href="<?php echo esc_url($header_url($item['url'])); ?>"
-            class="rounded-xl border border-slate-200 bg-white px-4 py-3 font-['Inter',sans-serif] text-base font-[700] leading-6 text-[#3B4658] shadow-sm transition-all duration-200 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700">
-            <?php echo esc_html($item['label']); ?>
-          </a>
-        <?php endforeach; ?>
 
         <div class="mt-2 grid gap-2 sm:grid-cols-2">
           <a
@@ -545,7 +571,10 @@ $render_icon = function ($icon, $classes = 'h-4 w-4') {
         if (resourcesDropdown && resourcesToggle) {
           resourcesToggle.addEventListener('click', function(event) {
             event.preventDefault();
+            event.stopPropagation();
+
             var isOpen = resourcesDropdown.classList.contains('is-open');
+
             resourcesDropdown.classList.toggle('is-open', !isOpen);
             resourcesToggle.setAttribute('aria-expanded', String(!isOpen));
           });
@@ -565,40 +594,11 @@ $render_icon = function ($icon, $classes = 'h-4 w-4') {
           });
         }
 
-        if (toggle && mobileMenu) {
-          var openIcon = toggle.querySelector('.mobile-menu-open');
-          var closeIcon = toggle.querySelector('.mobile-menu-close');
-
-          toggle.addEventListener('click', function() {
-            var isOpen = !mobileMenu.classList.contains('hidden');
-
-            mobileMenu.classList.toggle('hidden', isOpen);
-            toggle.setAttribute('aria-expanded', String(!isOpen));
-
-            if (openIcon) {
-              openIcon.classList.toggle('hidden', !isOpen);
-            }
-
-            if (closeIcon) {
-              closeIcon.classList.toggle('hidden', isOpen);
-            }
-          });
-
-          mobileMenu.querySelectorAll('a').forEach(function(link) {
-            link.addEventListener('click', function() {
-              mobileMenu.classList.add('hidden');
-              toggle.setAttribute('aria-expanded', 'false');
-
-              if (openIcon) {
-                openIcon.classList.remove('hidden');
-              }
-
-              if (closeIcon) {
-                closeIcon.classList.add('hidden');
-              }
-            });
-          });
-        }
+        /*
+         * Mobile menu is handled globally in assets/src/js/global.js.
+         * Keeping only one mobile-menu controller prevents double-toggle conflicts
+         * where the menu opens and immediately closes on the same click.
+         */
       }
 
       if (document.readyState === 'loading') {

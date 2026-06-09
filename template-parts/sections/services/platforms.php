@@ -667,7 +667,7 @@ $platform_schema = [
               <?php esc_html_e('Platform Selection Strategy', 'reviewservicepro'); ?>
             </span>
 
-            <h3 class="max-w-2xl font-sans text-3xl font-black leading-tight tracking-[-0.03em] text-white md:text-4xl">
+            <h3 class="max-w-2xl font-sans text-3xl font-black leading-tight tracking-[-0.03em] text-white! md:text-4xl">
               <?php esc_html_e('We choose platforms based on your business, not a generic checklist.', 'reviewservicepro'); ?>
             </h3>
 

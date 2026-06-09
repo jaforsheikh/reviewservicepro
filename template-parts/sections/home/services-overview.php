@@ -392,6 +392,50 @@ $ethical_items = array(
       color: #475569;
     }
 
+
+
+    /* Timeline readability fix: JS may add text-white for dark layouts,
+       but this section is light/white, so force clear SaaS colors. */
+    #services-overview .orm-tl-icon {
+      border-color: #DBEAFE !important;
+      background: #FFFFFF !important;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+    }
+
+    #services-overview .orm-tl-icon-color {
+      color: #2563EB !important;
+    }
+
+    #services-overview .orm-tl-label {
+      color: #3B4658 !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.02em;
+    }
+
+    #services-overview .orm-tl-desc {
+      color: #64748B !important;
+      font-weight: 400 !important;
+    }
+
+    #services-overview .orm-tl-step.is-active .orm-tl-icon,
+    #services-overview .orm-tl-step:hover .orm-tl-icon {
+      border-color: rgba(37, 99, 235, 0.28) !important;
+      background: #EFF6FF !important;
+      box-shadow: 0 16px 40px rgba(37, 99, 235, 0.10);
+    }
+
+    #services-overview .orm-tl-step.is-active .orm-tl-icon-color,
+    #services-overview .orm-tl-step:hover .orm-tl-icon-color,
+    #services-overview .orm-tl-step.is-active .orm-tl-label,
+    #services-overview .orm-tl-step:hover .orm-tl-label {
+      color: #2563EB !important;
+    }
+
+    #services-overview .orm-tl-step.is-active .orm-tl-desc,
+    #services-overview .orm-tl-step:hover .orm-tl-desc {
+      color: #475569 !important;
+    }
+
     #services-overview .rsp-svc-ethical-image {
       animation: rspSvcFloat 7s ease-in-out infinite;
     }
@@ -624,14 +668,14 @@ $ethical_items = array(
               <?php foreach ($timeline_steps as $step) : ?>
                 <div class="orm-tl-step text-center">
                   <div class="orm-tl-icon mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-[#E2E8F0] bg-[#F8FAFC] transition-all duration-500">
-                    <i data-lucide="<?php echo esc_attr($step['icon']); ?>" class="orm-tl-icon-color h-6 w-6 text-[#CBD5E1] transition-colors duration-500" aria-hidden="true"></i>
+                    <i data-lucide="<?php echo esc_attr($step['icon']); ?>" class="orm-tl-icon-color h-6 w-6 text-[#2563EB] transition-colors duration-500" aria-hidden="true"></i>
                   </div>
 
-                  <p class="orm-tl-label mb-2 font-['Poppins',sans-serif] text-[16px] font-bold text-[#94A3B8] transition-colors duration-500">
+                  <p class="orm-tl-label mb-2 font-['Poppins',sans-serif] text-[16px] font-bold text-[#3B4658] transition-colors duration-500">
                     <?php echo esc_html($step['label']); ?>
                   </p>
 
-                  <p class="orm-tl-desc font-['Inter',sans-serif] text-[16px] font-normal leading-[1.65] text-[#94A3B8] transition-colors duration-500">
+                  <p class="orm-tl-desc font-['Inter',sans-serif] text-[16px] font-normal leading-[1.65] text-[#64748B] transition-colors duration-500">
                     <?php echo esc_html($step['desc']); ?>
                   </p>
                 </div>
